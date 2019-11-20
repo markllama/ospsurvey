@@ -19,6 +19,5 @@ infrastructure: communications, database and presentation.
 Additional details TBD
 
 '''
-
-Version: {revnumber}
-Date: {revdate} 
+Revision Number: {revnumber} +
+Revision Date: {revdate} 
