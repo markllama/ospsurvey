@@ -1,0 +1,22 @@
+== Red Hat OpenStack Platform Survey
+Mark Lamourine <markllama@gmail.com>
+:revnumber: 0.9.0
+:revdate: Wed 20 Nov 2019 04:31:09 PM EST
+
+This software is meant to provide visibility and reporting on the
+current state of an existing Red Hat OpenStack Platform deployment.
+
+The tool consists of three components.
+
+1. Data Collection - Survey
+1. Data Storage - Time Series data
+1. Reporting - Text or formatted state and change analysis output
+
+Where possible the components use or integrate with existing
+infrastructure: communications, database and presentation.
+
+Additional details TBD
+
+----
+Version: {revnumber}
+Date: {revdate} 
