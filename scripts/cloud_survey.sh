@@ -36,6 +36,29 @@ function node_capabilities() {
     echo ${CAPS[@]}
 }
 
+function overcloud_stack_name() {
+    local -a STACKS
+    STACKS=($(openstack stack list -f value -c 'Stack Name'))
+
+    # Check for length != 1
+    
+    echo ${STACKS[0]}
+}
+
+function overcloud_server_types() {
+    local CLOUD=$1
+    SERVER_TYPES=($(openstack stack resource list ord1 -f value -c resource_name | grep Servers))
+
+    echo ${SERVER_TYPES[@]}
+
+}
+
+function overcloud_server_count() {
+    local CLOUD=$1
+    local SERVER_TYPE=$2
+    openstack stack resource show ${CLOUD} ${SERVER_TYPE} -f json | jq '.attributes.value | length'
+}
+
 function main() {
     echo "BEGIN: main"
 
