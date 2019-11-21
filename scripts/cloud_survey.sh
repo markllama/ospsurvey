@@ -5,8 +5,7 @@
 
 # Allow ENV override of variables
 
-OSP_RELEASE_FILE=${OSP_RELEASE_FILE:=/etc/rhosp-release}
-UNDERCLOUD_RC_FILE=${UNDERCLOUD_RC_FILE:=${HOME}/stackrc}
+: ${UNDERCLOUD_RC_FILE:=${HOME}/stackrc}
 
 function hardware_product_name() {
 
@@ -15,10 +14,26 @@ function hardware_product_name() {
 }
 
 function osp_version() {
+    : ${OSP_RELEASE_FILE:=/etc/rhosp-release}
     echo "Release: "
-    if [ -r ${OSP_RELEASE_FILE} ] ; then
+    if [ -r "${OSP_RELEASE_FILE}" ] ; then
         cat ${OSP_RELEASE_FILE}
+    else
+        echo "OSP <13"
     fi
+}
+
+function server_flavor() {
+    local server_name_id=$1
+    openstack server show ${server_name_id} -f json | jq --raw-output .flavor | cut -d' ' -f1
+}
+
+function node_capabilities() {
+    local SERVER=$1
+    local -a CAPS
+    
+    CAPS=($(IFS=, openstack baremetal node show ${SERVER} -f json | jq --raw-output .properties.capabilities))
+    echo ${CAPS[@]}
 }
 
 function main() {
