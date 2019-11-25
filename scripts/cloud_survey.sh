@@ -153,8 +153,9 @@ function overcloud_server_count() {
 function main() {
     echo "BEGIN: main"
 
-    echo PRODUCT INFO: $(hardware_product_name)
-    echo OSP VERSION : $(osp_version)
+    echo "PRODUCT INFO: $(hardware_product_name)"
+    echo "OS VERSION  : $(os_version)"
+    echo "OSP VERSION : $(osp_version)"
     echo "END: main"
 }
 
