@@ -106,11 +106,16 @@ function package_version() {
 #
 function osp_version() {
     : ${OSP_RELEASE_FILE:=/etc/rhosp-release}
-    echo -n "Release: "
     if [ -r "${OSP_RELEASE_FILE}" ] ; then
         cat ${OSP_RELEASE_FILE}
     else
-        echo ${TRIPLEO_VERSION_MAP[$(package_version python-tripleoclient)]}
+        local TRIPLEO_PACKAGE_VERSION="$(package_version python-tripleoclient)"
+        if [[ "${TRIPLEO_PACKAGE_VERSION}" =~ "not installed" ]] ; then
+            echo "Not Installed"
+            return 0
+        fi
+        local TRIPLEO_VERSION=${TRIPLEO_VERSION_MAP[${TRIPLEO_PACKAGE_VERSION}]}
+        echo ${TRIPLEO_VERSION}
     fi
 }
 
