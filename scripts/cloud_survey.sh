@@ -98,6 +98,13 @@ function package_version() {
     echo ${VERSION_STRING}
 }
 
+function is_controller_docker() {
+    echo "testing controller docker"
+}
+
+function is_controller_systemd() {
+    echo "testing controller systemd"
+}
 
 #
 # For OSP13+ use /etc/rhosp-release
