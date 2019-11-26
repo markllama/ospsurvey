@@ -7,7 +7,8 @@ from __future__ import print_function
 #
 
 import os
-import argparse #
+import argparse
+import json
 import yaml
 import re
 
@@ -23,6 +24,7 @@ def parse_cli():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--templates", default=os.path.join(os.getenv("HOME"), "templates"))
+    parser.add_argument("--server-data", required=False)
 
     opts = parser.parse_args()
     return opts
@@ -43,7 +45,30 @@ def read_ip_assignments(ips_file):
 
     return ips_data
 
+def read_servers(servers_file):
     
+    f = open(servers_file)
+    server_data = json.load(f)
+
+    # convert the networks section to a dictionary
+    for s in server_data:
+        # A way-too-clever one-liner to convert a list of strings to a dict
+        s['Networks'] = {n:ip for (n,ip) in [ns.split('=') for ns in s['Networks'].split(',')]}
+
+    return server_data
+
+
+
+def server_role(server_name, role_catalog):
+    """
+    1) given server name, determine node id from HostnameMap
+    2) given node id, determine role
+       a) remove stack name from the beginning of the node id
+       b) replace node id index with %index%
+       c) find matching Scheduler Hints
+    """
+    pass
+
 if __name__ == "__main__":
     print("Begin")
     opts = parse_cli()
@@ -59,7 +84,16 @@ if __name__ == "__main__":
 
     print("hints: {}".format(hints))
     print(ips_data['parameter_defaults']['HostnameMap'])
+
+    if opts.server_data != None:
+        print("you provided server data")
+        server_data = read_servers(opts.server_data)
+        print(server_data)
     
-    
+
+    #
+    # - Now the real thing:
+    #
+    # assign a role to each server
     
     print("End")

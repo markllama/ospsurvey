@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "716198-compute03", 
+    "Networks": "ctlplane=172.23.216.113"
+  }, 
+  {
+    "Name": "716192-controller03", 
+    "Networks": "ctlplane=172.23.216.115"
+  }, 
+  {
+    "Name": "716190-controller01", 
+    "Networks": "ctlplane=172.23.216.112"
+  }, 
+  {
+    "Name": "716191-controller02", 
+    "Networks": "ctlplane=172.23.216.117"
+  }, 
+  {
+    "Name": "716196-compute01", 
+    "Networks": "ctlplane=172.23.216.118"
+  }, 
+  {
+    "Name": "716197-compute02", 
+    "Networks": "ctlplane=172.23.216.111"
+  }
+]
