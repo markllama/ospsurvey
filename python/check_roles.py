@@ -72,28 +72,28 @@ def server_role(server_name, role_catalog):
 if __name__ == "__main__":
     print("Begin")
     opts = parse_cli()
-    print(opts)
 
     roles = read_roles(os.path.join(opts.templates, yaml_files['roles']))
 
-    print(role_names(roles))
-
     ips_data = read_ip_assignments(os.path.join(opts.templates, yaml_files['ips']))
+
+    hostname_map = ips_data['parameter_defaults']['HostnameMap']
+    print(hostname_map)
+    node_map = {v:k for (k,v) in hostname_map.items()}
+    print(node_map)
 
     hints = [h for h in ips_data['parameter_defaults'] if hints_re.match(h)]
 
-    print("hints: {}".format(hints))
-    print(ips_data['parameter_defaults']['HostnameMap'])
-
     if opts.server_data != None:
-        print("you provided server data")
         server_data = read_servers(opts.server_data)
-        print(server_data)
-    
 
     #
     # - Now the real thing:
     #
     # assign a role to each server
+    role_map = {}
+    
+    for s in server_data:
+        print(server_role(s, role_map))
     
     print("End")
