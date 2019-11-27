@@ -2,6 +2,27 @@
 from __future__ import print_function
 
 #
+# Find the count of each type of server:
+#  Controller
+#  Compute
+#  BlockStorage
+#  ObjectStorage
+#  CephStorage
+
+# get the list of overcloud servers deployed
+
+# get the list of baremetal nodes available
+#   with .properties.capabilities {"node": "hint"}
+#    and provisioning state
+
+# compare node hint to scheduler hint patterns
+
+# get the HostnameMap and Scheduler Hints
+
+
+
+
+#
 # Data Sources:
 #  openstack server list
 #  openstack baremetal node list
