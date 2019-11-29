@@ -20,6 +20,6 @@ ks_credentials = {
 if __name__ == "__main__":
     
     ks_auth = keystoneauth1.identity.v3.Password(**ks_credentials)
-    ks_session = keystoneauth1.session(auth=ks_auth)
+    ks_session = keystoneauth1.session.Session(auth=ks_auth)
 
     # now pass the session to an Openstack API client like ironicclient.client()
