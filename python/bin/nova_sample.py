@@ -7,7 +7,7 @@ import os
 import keystoneauth1.session
 import keystoneauth1.identity
 
-import ironicclient
+import novaclient
 
 auth_env_keys = [
     'OS_AUTH_URL', 'OS_USERNAME', 'OS_PASSWORD',
