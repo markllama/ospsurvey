@@ -21,7 +21,7 @@ ks_credentials = {
 
 if __name__ == "__main__":
 
-    print(os_credentials)
+    print(ks_credentials)
     ks_auth = keystoneauth1.identity.v3.Password(**ks_credentials)
 
     ks_session = keystoneauth1.session.Session(auth=ks_auth)
