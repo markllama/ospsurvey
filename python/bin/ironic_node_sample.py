@@ -7,6 +7,8 @@ import os
 import keystoneauth1.session
 import keystoneauth1.identity
 
+import keystonclient.client
+
 import ironicclient.client
 
 auth_env_keys = [
@@ -33,10 +35,15 @@ if __name__ == "__main__":
 
     ks_auth_version = int(os.getenv('OS_IDENTITY_API_VERSION')) if 'OS_IDENTITY_API_VERSION' in os.environ.keys() else 2
 
+
+    ks = keystoneclient.client.Client(ks_auth_version, session=ks_session, auth_url=ks_creds['auth_url'])
+
+    ironic_endpoint = ks.get_endpoint(ks_session, 'baremetal')
+    
+    ks_token = ks.get_token(ks_session)
     client = ironicclient.client.Client(
         1,
-        os_ironic_api_version=os.getenv("IRONIC_API_VERSION"),
-        session=ks_session
+        ks_token
     )
 
     nodes = client.node.list()
