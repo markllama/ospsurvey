@@ -7,7 +7,7 @@ import os
 import keystoneauth1.session
 import keystoneauth1.identity
 
-import ironicclient
+import ironicclient.client
 
 auth_env_keys = [
     'OS_AUTH_URL', 'OS_USERNAME', 'OS_PASSWORD',
@@ -43,6 +43,6 @@ if __name__ == "__main__":
 
     print(nodes[0].instance_uuid)
 
-    node = client.node.get_by_instance_uuid(nodes[0].instance_uuid)
+    #node = client.node.get_by_instance_uuid(nodes[0].instance_uuid)
 
-    print(node.properties)
+    #print(node.properties)
