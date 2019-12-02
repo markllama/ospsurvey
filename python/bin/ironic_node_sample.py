@@ -7,7 +7,7 @@ import os
 import keystoneauth1.session
 import keystoneauth1.identity
 
-import keystonclient.client
+import keystoneclient.client
 
 import ironicclient.client
 
