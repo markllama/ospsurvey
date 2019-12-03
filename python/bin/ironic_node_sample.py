@@ -38,6 +38,8 @@ if __name__ == "__main__":
 
     ks = keystoneclient.client.Client(ks_auth_version, session=ks_session, auth_url=ks_creds['auth_url'])
 
+    ks.negotiate_api_version()
+    
     ironic_endpoint = ks.get_endpoint(ks_session, 'baremetal')
     
     ks_token = ks.get_token(ks_session)
