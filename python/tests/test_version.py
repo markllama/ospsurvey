@@ -40,11 +40,11 @@ class TestOspVersion(unittest.TestCase):
         """
         Get the RPM info and parse for repo.
         """
-        test_package = "python2"
+        test_package = "filesystem"
         ospsurvey.version.get_package_info(test_package)
 
     def test_get_package_info(self):
-        test_package = "python2"
+        test_package = "filesystem"
 
         # find a package you know is installed
 
