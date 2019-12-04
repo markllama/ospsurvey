@@ -1,0 +1,16 @@
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+Repodata is over 2 weeks old. Install yum-cron? Or run: yum makecache fast
+Installed Packages
+Name        : python-tripleoclient
+Arch        : noarch
+Version     : 9.2.7
+Release     : 11.el7ost
+Size        : 1.5 M
+Repo        : installed
+From repo   : rhel-7-server-openstack-13-rpms
+Summary     : OpenstackClient plugin for tripleoclient
+URL         : https://pypi.python.org/pypi/python-tripleoclient
+License     : ASL 2.0
+Description : python-tripleoclient is a Python plugin to OpenstackClient
+            : for TripleO <https://github.com/openstack/python-tripleoclient>.
+

@@ -1,0 +1,26 @@
+Installed Packages
+Name         : python2
+Version      : 2.7.17
+Release      : 1.fc30
+Architecture : x86_64
+Size         : 91 k
+Source       : python2-2.7.17-1.fc30.src.rpm
+Repository   : @System
+From repo    : updates
+Summary      : An interpreted, interactive, object-oriented programming language
+URL          : https://www.python.org/
+License      : Python
+Description  : Python 2 is an old version of the language that is incompatible
+             : with the 3.x line of releases. The language is mostly the same,
+             : but many details, especially how built-in objects like
+             : dictionaries and strings work, have changed considerably, and a
+             : lot of deprecated features have finally been removed in the 3.x
+             : line.
+             : 
+             : Note that documentation for Python 2 is provided in the
+             : python2-docs package.
+             : 
+             : This package provides the "python2" executable; most of the
+             : actual implementation is within the "python2-libs" package.
+
+

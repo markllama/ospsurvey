@@ -43,15 +43,20 @@ yum_repos = {
 default_osp_package = "python_tripleoclient"
 
 
-def version(version_file=default_version_file):
+def version(version_file=default_version_file, osp_package=default_osp_package):
     """
     Query and report the OSP version installed.
     """
 
     if os.path.exists(version_file):
-        (version_number, version_name) = version_from_file(version_file)
+        (version_string, version_name) = version_from_file(version_file)
 
-    return version_number
+    else:
+        package_info = get_package_info(osp_package)
+        repo_name = get_package_repo_name(package_info)
+        version_string = get_version_from_repo_name(repo_name)
+        
+    return version_string
 
 
 def version_from_file(version_file):
@@ -73,35 +78,55 @@ def version_from_file(version_file):
 
     return release_match.groups()
 
-def version_from_repo_name(package_name=default_osp_package):
+def get_package_info(package_name):
     """
-    The source repo name is stored with the package.
+    Query the system for package information of a specified RPM
     Query the package information only for the installed package and
     work from cached data to avoid side effects to the host.
-    The "From repo" line indicates where the package came from.
-    That name should indicate the major version of OSP from a table.
+    Return a list of lines from the response STDOUT
     """
     
     info_command_template = "yum info installed --cacheonly {}"
     info_command = info_command_template.format(package_name)
 
     # subprocess wants a list of arguments, not a single string
-    package_info = subprocess.check_output(info_command.split())
+    package_info = subprocess.check_output(info_command.split(),
+                                           stderr=subprocess.STDOUT)
 
-    # check_output returns the stdout as a single string
-    # Convert to an array of lines
-    package_lines = package_info.split("\n")
+    return package_info.split("\n")
+
+def get_package_repo_name(package_info):
+    """
+    The source repo name is stored with the package.
+    The "From repo" line indicates where the package came from.
+
+    Return the repo name or None if not found
+    """
 
     # should check that there is EXACTLY one line
     repo_lines = \
-        [line for line in package_lines if line.startswith("From repo ")]
+        [line for line in package_info if line.startswith("From repo ")]
 
     # "From repo    : <repo name>"
     # Get the value and remove white space.
-    repo_name = repo_lines[0].split(':')[1].strip()
+    if len(repo_lines) > 0:
+        repo_name = repo_lines[0].split(':')[1].strip()
+    else:
+        repo_name = None
+
+    return repo_name
     
-    version_string = yum_repos[repo_name] \
-        if repo_name in yum_repos.keys() \
+
+def get_version_from_repo_name(package_repo_name):
+    """
+    Get the repo name for an OSP package
+    That name should indicate the major version of OSP from a table.
+
+    Return the version matching the repo name or None if not found
+    """
+    
+    version_string = yum_repos[package_repo_name] \
+        if package_repo_name in yum_repos.keys() \
            else None
 
     return version_string
