@@ -40,7 +40,7 @@ yum_repos = {
     "rhel-7-server-openstack-13-rpms": "13"
 }
 
-default_osp_package = "python_tripleoclient"
+default_osp_package = "python-tripleoclient"
 
 
 def version(version_file=default_version_file, osp_package=default_osp_package):
@@ -55,7 +55,10 @@ def version(version_file=default_version_file, osp_package=default_osp_package):
         package_info = get_package_info(osp_package)
         repo_name = get_package_repo_name(package_info)
         version_string = get_version_from_repo_name(repo_name)
-        
+
+        if version_string == None:
+            version_string = "unknown"
+            
     return version_string
 
 
@@ -90,8 +93,12 @@ def get_package_info(package_name):
     info_command = info_command_template.format(package_name)
 
     # subprocess wants a list of arguments, not a single string
-    package_info = subprocess.check_output(info_command.split(),
-                                           stderr=subprocess.STDOUT)
+    try:
+        package_info = subprocess.check_output(info_command.split(),
+                                               stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        print(e)
+        package_info = ""
 
     return package_info.split("\n")
 

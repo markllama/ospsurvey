@@ -16,7 +16,22 @@ The tool consists of three components.
 Where possible the components use or integrate with existing
 infrastructure: communications, database and presentation.
 
-Additional details TBD
+=== Usage
+
+The ospsurvey command is meant to be run on a Director node as the stack user.
+It uses the OS_* environment variables for authentication and access to the
+undercloud.
+
+The survey results can be reported either as a pretty table or as JSON
+
+=== Probes
+
+* RHEL OS Release
+* RH OSP Release
+* Overcloud Deployment info:
+** Overcloud stack name
+** Overcloud deploy date/time
+** Overcloud update date/time
 
 '''
 Revision Number: {revnumber} +
