@@ -1,0 +1,114 @@
+= Undercloud Authentication
+
+The undercloud access is defined in the `stackrc` file in the stack
+user's home directory. Each OSP version defines a different set of
+environment variables that are used by the openstack client and API to
+connect to and communicate with the undercloud services.
+
+Each version defines a different set of environment variables and uses
+them to create a session for the client.
+
+== OSP9
+
+* COMPUTE_API_VERSION
+* NOVA_VERSION
+* OS_AUTH_URL
+* OS_CLOUDNAME
+* OS_IMAGE_API_VERSION
+* OS_NO_CACHE
+* OS_PASSWORD
+* OS_TENANT_NAME
+* OS_USERNAME
+* PYTHONWARNINGS
+
+== OSP10
+
+* COMPUTE_API_VERSION
+* NOVA_VERSION
+* OS_AUTH_URL
+* OS_BAREMETAL_API_VERSION
+* OS_CLOUDNAME
+* OS_IMAGE_API_VERSION
+* OS_NO_CACHE
+* OS_PASSWORD
+* OS_TENANT_NAME
+* OS_USERNAME
+* PYTHONWARNINGS
+
+== OSP12
+
+
+* COMPUTE_API_VERSION
+* IRONIC_API_VERSION
+* NOVA_VERSION
+* OS_AUTH_TYPE
+* OS_AUTH_URL
+* OS_BAREMETAL_API_VERSION
+* OS_CLOUDNAME
+* OS_IDENTITY_API_VERSION
+* OS_NO_CACHE
+* OS_PASSWORD
+* OS_PROJECT_DOMAIN_NAME
+* OS_PROJECT_NAME
+* OS_USER_DOMAIN_NAME
+* OS_USERNAME
+* PYTHONWARNINGS
+
+== OSP13
+
+* COMPUTE_API_VERSION
+* IRONIC_API_VERSION
+* NOVA_VERSION
+* OS_AUTH_TYPE
+* OS_AUTH_URL
+* OS_BAREMETAL_API_VERSION
+* OS_CLOUDNAME
+* OS_IDENTITY_API_VERSION
+* OS_NO_CACHE
+* OS_PASSWORD
+* OS_PROJECT_DOMAIN_NAME
+* OS_PROJECT_NAME
+* OS_USER_DOMAIN_NAME
+* OS_USERNAME
+* PYTHONWARNINGS
+
+
+.Undercloud Environment Variables
+|===
+| Variable Name |OSP9 |OSP10 |OSP11 |OSP12 |OSP13
+
+| COMPUTE_API_VERSION | X | X | - | X | X
+
+| IRONIC_API_VERSION  |   |   | - | X  | X  
+
+| NOVA_VERSION | X  | X | - | X | X
+
+| OS_AUTH_TYPE |  |  | - | X | X
+
+| OS_AUTH_URL  | X | X | - | X | X
+
+| OS_BAREMETAL_API_VERSION |  | X | - | X | X
+
+| OS_CLOUDNAME | X | X | - | X | X
+
+| OS_IMAGE_API_VERSION | X | X |  | |
+
+| OS_IDENTITY_API_VERSION |  |  | - | 3 | 3
+
+| OS_NO_CACHE | X | X | - | X | X
+
+| OS_PASSWORD | X | X | - | X | X
+
+| OS_PROJECT_DOMAIN_NAME |  |  | - | X | X
+
+| OS_PROJECT_NAME |  |  | - | X | X
+
+| OS_TENANT_NAME | X | X | - |  | 
+
+| OS_USER_DOMAIN_NAME |  |  | - | X | X
+ 
+| OS_USERNAME  | X | X | - | X | X
+
+| PYTHONWARNINGS  | X | X | - | X | X
+
+|===
