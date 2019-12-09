@@ -9,6 +9,8 @@ Output data either as a pretty table or as JSON structured data for consumption 
 or analysis tool.
 """
 
+import json
+
 import keystoneauth1
 import keystoneclient
 import novaclient
@@ -29,7 +31,7 @@ if __name__ == "__main__":
 
   
   # report OSP Library Versions
-  osp_status['api_versions'] = get_osp_api_versions()
+  osp_status['python_versions'] = get_osp_api_versions()
 
   # create session
   
@@ -51,4 +53,4 @@ if __name__ == "__main__":
 
   # report status
 
-  print(osp_status)
+  print(json.dumps(osp_status))
