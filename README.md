@@ -31,6 +31,6 @@ The survey results can be reported either as a pretty table or as JSON
   * Overcloud deploy date/time
   * Overcloud update date/time
 
-'''
-Revision Number: 0.1.1
-Revision Date: Tue Dec 10 21:04:26 UTC 2019
+
+Revision Number: 0.1.1  
+Revision Date: Tue Dec 10 21:13:56 UTC 2019
