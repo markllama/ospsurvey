@@ -13,8 +13,14 @@ import os
 import json
 
 import keystoneauth1
+import keystoneauth1.identity
+import keystoneauth1.session
+
 import keystoneclient
+import keystoneclient.v3
+
 import novaclient
+import novaclient.client
 
 osp_status = {}
 
@@ -55,11 +61,32 @@ osp_varmap = {
 }
 
 def get_osp_envvars():
+  """
+  TBD
+  """
   envvars = {}
   for k,v in osp_varmap.items():
     envvars[v] = os.environ[k] if k in os.environ else None
 
   return envvars
+
+def create_keystone_session(credentials):
+  """
+  TBD
+  """
+  auth = keystoneauth1.identity.v3.Password(
+    auth_url=credentials['auth_url'],
+    username=credentials['username'],
+    password=credentials['password'],
+    project_name=credentials['project_name'],
+    user_domain_name=credentials['user_domain_name'],
+    project_domain_name=credentials['project_domain_name']
+  )
+
+  session = keystoneauth1.session.Session(auth=auth)
+  
+  return session
+
   
 if __name__ == "__main__":
 
@@ -69,7 +96,11 @@ if __name__ == "__main__":
   osp_status['python_versions'] = get_osp_module_versions()
 
   # create session
-  
+  ks_session = create_keystone_session(osp_envvars)
+
+  # NOTE: All inputs have NOVA_VERSION at 1.1, but it's deprecated
+  # The novaclient library sets API_MIN_VERSION at 2.1 and MAX_VERSION at 2.6
+  nova = novaclient.client.Client(2, session=ks_session)
   # create functions with session
 
   # call functions to fill structure
