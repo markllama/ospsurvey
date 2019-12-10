@@ -26,7 +26,7 @@ setup(
   version='0.1.1',
   description='Survey an OpenStack Cluster',
   long_description=long_description,
-  long_description_content_type='text/markdown',
+  #long_description_content_type='text/markdown',
   url='https://github.com/markllama/ospsurvey',
   author='Mark Lamourine',
   author_email='markllama@gmail.com',
@@ -43,6 +43,6 @@ setup(
   
   package_dir={'': 'src'},
   packages=find_packages(where='src'),
-  python_requires='>=2.7',
+  #python_requires='>=2.7',
   
 )
