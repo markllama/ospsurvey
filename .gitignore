@@ -1,3 +1,7 @@
+# Ignore Python dist files
+dist
+*.egg-info
+
 # Ignore Emacs backup files
 *~
 *.pyc

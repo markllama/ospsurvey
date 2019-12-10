@@ -101,6 +101,7 @@ if __name__ == "__main__":
   # NOTE: All inputs have NOVA_VERSION at 1.1, but it's deprecated
   # The novaclient library sets API_MIN_VERSION at 2.1 and MAX_VERSION at 2.6
   nova = novaclient.client.Client(2, session=ks_session)
+  
   # create functions with session
 
   # call functions to fill structure
