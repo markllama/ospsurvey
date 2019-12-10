@@ -1,5 +1,6 @@
 ## Red Hat OpenStack Platform Survey
-Mark Lamourine <markllama@gmail.com>
+Mark Lamourine  
+<markllama@gmail.com>
 
 This software is meant to provide visibility and reporting on the
 current state of an existing Red Hat OpenStack Platform deployment.
@@ -32,4 +33,4 @@ The survey results can be reported either as a pretty table or as JSON
 
 '''
 Revision Number: 0.1.1
-Revision Date: Tue Dec 10 20:25:31 UTC 2019
+Revision Date: Tue Dec 10 21:04:26 UTC 2019
