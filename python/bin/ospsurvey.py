@@ -9,6 +9,7 @@ Output data either as a pretty table or as JSON structured data for consumption 
 or analysis tool.
 """
 
+import os
 import json
 
 import keystoneauth1
@@ -55,7 +56,7 @@ osp_varmap = {
 
 def get_osp_envvars():
   envvars = {}
-  for k,v in osp_varname_map.items():
+  for k,v in osp_varmap.items():
     envvars[v] = os.environ[k] if k in os.environ else None
 
   return envvars
