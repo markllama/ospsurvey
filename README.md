@@ -1,7 +1,4 @@
-:revnumber: 0.9.0
-:revdate: Wed 20 Nov 2019 04:31:09 PM EST
-
-== Red Hat OpenStack Platform Survey
+## Red Hat OpenStack Platform Survey
 Mark Lamourine <markllama@gmail.com>
 
 This software is meant to provide visibility and reporting on the
@@ -16,7 +13,7 @@ The tool consists of three components.
 Where possible the components use or integrate with existing
 infrastructure: communications, database and presentation.
 
-=== Usage
+### Usage
 
 The ospsurvey command is meant to be run on a Director node as the stack user.
 It uses the OS_* environment variables for authentication and access to the
@@ -24,15 +21,15 @@ undercloud.
 
 The survey results can be reported either as a pretty table or as JSON
 
-=== Probes
+### Probes
 
 * RHEL OS Release
 * RH OSP Release
 * Overcloud Deployment info:
-** Overcloud stack name
-** Overcloud deploy date/time
-** Overcloud update date/time
+  * Overcloud stack name
+  * Overcloud deploy date/time
+  * Overcloud update date/time
 
 '''
-Revision Number: {revnumber} +
-Revision Date: {revdate} 
+Revision Number: 0.1.1
+Revision Date: Tue Dec 10 20:25:31 UTC 2019
