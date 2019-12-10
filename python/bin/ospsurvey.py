@@ -62,6 +62,7 @@ def get_osp_envvars():
   
 if __name__ == "__main__":
 
+  osp_envvars = get_osp_envvars()
   
   # report OSP Library Versions
   osp_status['python_versions'] = get_osp_module_versions()
@@ -86,4 +87,5 @@ if __name__ == "__main__":
 
   # report status
 
+  print(json.dumps(osp_envvars))
   print(json.dumps(osp_status))
