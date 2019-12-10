@@ -1,4 +1,5 @@
 # Ignore Python dist files
+build
 dist
 *.egg-info
 

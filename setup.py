@@ -8,8 +8,4 @@ state of an OpenStack cluster from the Director node.
 
 from setuptools import setup, find_packages
 
-setup(
-  name="ospsurvey",
-  version="0.1",
-  packages=find_packages(),
-)
+setup()
