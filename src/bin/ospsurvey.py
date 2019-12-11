@@ -104,10 +104,13 @@ if __name__ == "__main__":
       '''.strip()
     )
     sys.exit(1)
+
+  if osp_envvars['identity_api_version'] == "3" and not osp_envvars['auth_url'].endswith('v3'):
+    osp_envvars['auth_url'] += "v3/"
   
 
   # create session
-  print("creating sesson")
+  print("creating sesson to: {}".format(osp_envvars['auth_url']))
   ks_session = create_keystone_session(osp_envvars)
 
   print("creating keystone client")
