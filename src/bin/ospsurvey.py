@@ -107,7 +107,7 @@ def confirm_endpoints(ksclient):
     ep_service = ksclient.services.get(endpoint.service_id)
     print('Service Name: {}, Service Type: {}, URL: {}'.format(
       ep_service.name, ep_service.type, endpoint.url
-    )
+    ))
 
     # ping the URL host
     url = urlparse(endpoint.url)
