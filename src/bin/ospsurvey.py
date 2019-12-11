@@ -14,9 +14,9 @@ import os
 import json
 
 if sys.version_info.major < 3:
-  import urlparse
+  from urlparse import urlparse
 else:
-  import urllib.parse as urlparse
+  from urllib.parse import urlparse
 
 import keystoneauth1
 import keystoneauth1.identity
