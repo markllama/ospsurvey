@@ -9,6 +9,7 @@ Output data either as a pretty table or as JSON structured data for consumption 
 or analysis tool.
 """
 
+import sys
 import os
 import json
 
@@ -89,20 +90,36 @@ def create_keystone_session(credentials):
 
   
 if __name__ == "__main__":
-
-  osp_envvars = get_osp_envvars()
   
   # report OSP Library Versions
   osp_status['python_versions'] = get_osp_module_versions()
 
+  osp_envvars = get_osp_envvars()
+  # check for auth info
+  # must have auth_url, username and password at least
+  if not (osp_envvars['username'] and osp_envvars['password'] and osp_envvars['auth_url']):
+    print(
+      '''
+      FATAL: no OSP credentials.  Please source the stackrc file and try again
+      '''.strip()
+    )
+    sys.exit(1)
+  
+
   # create session
+  print("creating sesson")
   ks_session = create_keystone_session(osp_envvars)
 
+  print("creating keystone client")
+  ks = keystoneclient.client.Client(session=ks_session)
+  
   # NOTE: All inputs have NOVA_VERSION at 1.1, but it's deprecated
   # The novaclient library sets API_MIN_VERSION at 2.1 and MAX_VERSION at 2.6
+  print("creating nova client")
   nova = novaclient.client.Client(2, session=ks_session)
   
   # create functions with session
+  #servers = nova.servers.list()
 
   # call functions to fill structure
 
