@@ -115,9 +115,6 @@ def confirm_endpoints(ksclient):
       ep_service.name, url.hostname, url.port
     ))
 
-    # 
-  }
-
   
 if __name__ == "__main__":
   
