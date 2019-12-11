@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import unittest
 
-from context import ospsurvey
+import ospsurvey.version
 
 class TestOspVersion(unittest.TestCase):
 
