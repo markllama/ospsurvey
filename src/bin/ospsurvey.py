@@ -13,6 +13,11 @@ import sys
 import os
 import json
 
+if sys.version_info.major < 3:
+  import urlparse
+else:
+  import urllib.parse as urlparse
+
 import keystoneauth1
 import keystoneauth1.identity
 import keystoneauth1.session
@@ -88,6 +93,31 @@ def create_keystone_session(credentials):
   
   return session
 
+
+def confirm_endpoints(ksclient):
+  """
+  Check the endpoint access for the keystone client provided
+  """
+
+  endpoints = (ep for ep in ksclient.endpoints.list() if ep.interface == 'admin')
+
+  print('Endpoints')
+  for endpoint in endpoints:
+    # get the service by id
+    ep_service = ksclient.services.get(endpoint.service_id)
+    print('Service Name: {}, Service Type: {}, URL: {}'.format(
+      ep_service.name, ep_service.type, endpoint.url
+    )
+
+    # ping the URL host
+    url = urlparse(endpoint.url)
+    print("testing endpoint {} - host: {}, port: {}".format(
+      ep_service.name, url.hostname, url.port
+    ))
+
+    # 
+  }
+
   
 if __name__ == "__main__":
   
@@ -115,6 +145,9 @@ if __name__ == "__main__":
 
   print("creating keystone client")
   ks = keystoneclient.client.Client(session=ks_session)
+
+  #endpoints = ks.endpoints.list()
+  confirm_endpoints(ks)
   
   # NOTE: All inputs have NOVA_VERSION at 1.1, but it's deprecated
   # The novaclient library sets API_MIN_VERSION at 2.1 and MAX_VERSION at 2.6
