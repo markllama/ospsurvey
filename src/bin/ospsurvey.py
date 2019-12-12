@@ -149,7 +149,7 @@ def confirm_endpoints(ksclient):
     else:
       print("- HOST ERROR")
 
-    url_status = url_check(url)
+    url_status = url_check(endpoint.url)
 
     if url_status:
       print("- ENDPOINT OK")
