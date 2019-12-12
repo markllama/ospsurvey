@@ -177,7 +177,7 @@ if __name__ == "__main__":
   # create session for API auth and access
   print("creating sesson to: {}".format(osp_envvars['auth_url']))
   #ks_session = create_keystone_session(osp_envvars)
-  ks_session = keystoneauth1.session.Session(auth=credentials)
+  ks_session = keystoneauth1.session.Session(auth=osp_envvars)
 
   # The API client uses the session object for auth and service endpoint
   # discovery. Create a client for each service to talk to.
