@@ -146,7 +146,8 @@ def ping_test(host, count=1):
   Send a set of ICMP packets at a host and check that it responds.
   """
   ping_cmd = "ping -q -n -c {} {}" # insert count and host
-  return subprocess.call(ping_cmd.format(count, host).split(), stdout="/dev/null", stderr="/dev/null") == 0
+  dev_null = open("/dev/null")
+  return subprocess.call(ping_cmd.format(count, host).split(), stdout=dev_null, stderr=dev_null) == 0
   
 # --------------------------------------------------------------------------
 #
