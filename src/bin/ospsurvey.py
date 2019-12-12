@@ -16,12 +16,15 @@ import sys
 import os
 import json
 
+# Several libraries have moved between Python 2 and 3
 if sys.version_info.major < 3:
   from urlparse import urlparse
-  import httplib as httplib
+  #import httplib as httplib
+  import urllib2 as urllib
 else:
   from urllib.parse import urlparse
-  import http.client as httplib
+  import urllib.request as urllib
+  #import http.client as httplib
 
 import subprocess
 
@@ -142,11 +145,17 @@ def confirm_endpoints(ksclient):
 
     ping = ping_test(url.hostname)
     if ping:
-      print("- OK")
+      print("- HOST OK")
     else:
-      print("- ERROR")
+      print("- HOST ERROR")
 
-    
+    url_status = url_check(url)
+
+    if url_status:
+      print("- ENDPOINT OK")
+    else:
+      print("- ENDPOINT ERROR")
+      
 
 def ping_test(host, count=1):
   """
@@ -155,7 +164,17 @@ def ping_test(host, count=1):
   ping_cmd = "ping -q -n -c {} {}" # insert count and host
   dev_null = open("/dev/null")
   return subprocess.call(ping_cmd.format(count, host).split(), stdout=dev_null, stderr=dev_null) == 0
+
+def url_check(url):
+
+  query = urllib.urlopen(url)
+  response_code = query.getcode()
+
+  return response_code == 200 
+#  conn = httplib.HTTPConnection(url.netloc)
+#  conn.request("GET", url.path)
   
+
 # --------------------------------------------------------------------------
 #
 # MAIN - connect to the OSP service and start gathering data
