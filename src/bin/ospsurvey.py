@@ -141,6 +141,8 @@ def confirm_endpoints(ksclient):
     ping = ping_test(url.hostname)
     if ping:
       print("- OK")
+    else:
+      print("- ERROR")
     
 
 def ping_test(host, count=1):
