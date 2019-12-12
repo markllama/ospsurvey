@@ -101,8 +101,7 @@ def get_osp_envvars():
 
 def create_keystone_session(credentials):
   """
-  Create a keystone Session object from the provided credentials
-  Convert the 
+  Create a keystone Session object from the provided credentials.
   """
   auth = keystoneauth1.identity.v3.Password(
     auth_url=credentials['auth_url'],
@@ -139,10 +138,16 @@ def confirm_endpoints(ksclient):
       ep_service.name, url.hostname, url.port
     ))
 
-def ping(host, count=1):
+    ping = ping_test(url.hostname)
+    
+
+def ping_test(host, count=1):
   """
   Send a set of ICMP packets at a host and check that it responds.
   """
+  ping_cmd = "ping -q -n -c {} {}" # insert count and host
+  return subprocess.call(ping_cmd.format(count, host).split()) == 0
+  
 # --------------------------------------------------------------------------
 #
 # MAIN - connect to the OSP service and start gathering data
