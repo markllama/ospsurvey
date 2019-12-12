@@ -9,6 +9,9 @@ Output data either as a pretty table or as JSON structured data for consumption 
 or analysis tool.
 """
 
+#
+# Standard Libraries
+#
 import sys
 import os
 import json
@@ -18,6 +21,11 @@ if sys.version_info.major < 3:
 else:
   from urllib.parse import urlparse
 
+import
+
+#
+# OpenStack libraries
+#
 import keystoneauth1
 import keystoneauth1.identity
 import keystoneauth1.session
@@ -28,10 +36,15 @@ import keystoneclient.v3
 import novaclient
 import novaclient.client
 
+# ----------------------------------------------------------------------------
+# Setup Functions
+# ----------------------------------------------------------------------------
+
 osp_status = {}
 
 def get_osp_module_versions():
   """
+  Collect the module versions of the OSP API 
   """
   versions = {
     'keystoneauth1': keystoneauth1.__version__,
@@ -41,6 +54,15 @@ def get_osp_module_versions():
 
   return versions
 
+#
+# Authentication Setup
+#
+
+#
+# The list of environment variables used for OSP API access
+# Map the environment variable name to the parameter named used by the
+# Keystoneauth Session object
+#
 osp_varmap = {
   'OS_IDENTITY_API_VERSION': 'identity_api_version',
 
@@ -68,7 +90,7 @@ osp_varmap = {
 
 def get_osp_envvars():
   """
-  TBD
+  Collect and return the OSP authentication values from the environment
   """
   envvars = {}
   for k,v in osp_varmap.items():
@@ -76,20 +98,22 @@ def get_osp_envvars():
 
   return envvars
 
+
 def create_keystone_session(credentials):
   """
-  TBD
+  Create a keystone Session object from the provided credentials
+  Convert the 
   """
-  auth = keystoneauth1.identity.v3.Password(
-    auth_url=credentials['auth_url'],
-    username=credentials['username'],
-    password=credentials['password'],
-    project_name=credentials['project_name'],
-    user_domain_name=credentials['user_domain_name'],
-    project_domain_name=credentials['project_domain_name']
-  )
+  #auth = keystoneauth1.identity.v3.Password(
+  #  auth_url=credentials['auth_url'],
+  #  username=credentials['username'],
+  #  password=credentials['password'],
+  #  project_name=credentials['project_name'],
+  #  user_domain_name=credentials['user_domain_name'],
+  #  project_domain_name=credentials['project_domain_name']
+  #)
 
-  session = keystoneauth1.session.Session(auth=auth)
+  session = keystoneauth1.session.Session(auth=credentials)
   
   return session
 
@@ -115,13 +139,25 @@ def confirm_endpoints(ksclient):
       ep_service.name, url.hostname, url.port
     ))
 
+def ping(host, count=1):
+  """
+  Send a set of ICMP packets at a host and check that it responds.
+  """
+# --------------------------------------------------------------------------
+#
+# MAIN - connect to the OSP service and start gathering data
+# 
+# --------------------------------------------------------------------------
   
 if __name__ == "__main__":
   
   # report OSP Library Versions
   osp_status['python_versions'] = get_osp_module_versions()
 
+  # Read he OSP related environment variables, used to connect to the service
+  # endpoints
   osp_envvars = get_osp_envvars()
+  
   # check for auth info
   # must have auth_url, username and password at least
   if not (osp_envvars['username'] and osp_envvars['password'] and osp_envvars['auth_url']):
@@ -132,18 +168,23 @@ if __name__ == "__main__":
     )
     sys.exit(1)
 
-  if osp_envvars['identity_api_version'] == "3" and not osp_envvars['auth_url'].endswith('v3'):
+  # At least in the stackrc I have seen, the v3/ suffix has been missing from
+  # the AUTH_URL.  Add it if using version 3 and it's not in the URL
+  if osp_envvars['identity_api_version'] == "3" and \
+     not osp_envvars['auth_url'].endswith('v3'):
     osp_envvars['auth_url'] += "v3/"
-  
 
-  # create session
+  # create session for API auth and access
   print("creating sesson to: {}".format(osp_envvars['auth_url']))
-  ks_session = create_keystone_session(osp_envvars)
+  #ks_session = create_keystone_session(osp_envvars)
+  ks_session = keystoneauth1.session.Session(auth=credentials)
 
+  # The API client uses the session object for auth and service endpoint
+  # discovery. Create a client for each service to talk to.
   print("creating keystone client")
   ks = keystoneclient.client.Client(session=ks_session)
 
-  #endpoints = ks.endpoints.list()
+  # using the keystone client, check the service endpoints
   confirm_endpoints(ks)
   
   # NOTE: All inputs have NOVA_VERSION at 1.1, but it's deprecated
