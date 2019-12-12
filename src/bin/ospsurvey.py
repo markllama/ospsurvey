@@ -18,8 +18,10 @@ import json
 
 if sys.version_info.major < 3:
   from urlparse import urlparse
+  import httplib as httplib
 else:
   from urllib.parse import urlparse
+  import http.client as httplib
 
 import subprocess
 
@@ -143,6 +145,7 @@ def confirm_endpoints(ksclient):
       print("- OK")
     else:
       print("- ERROR")
+
     
 
 def ping_test(host, count=1):
