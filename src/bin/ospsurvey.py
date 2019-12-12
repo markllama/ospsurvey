@@ -21,7 +21,7 @@ if sys.version_info.major < 3:
 else:
   from urllib.parse import urlparse
 
-import
+import subprocess
 
 #
 # OpenStack libraries
