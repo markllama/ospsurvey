@@ -113,7 +113,7 @@ def create_keystone_session(credentials):
     project_domain_name=credentials['project_domain_name']
   )
 
-  session = keystoneauth1.session.Session(auth=credentials)
+  session = keystoneauth1.session.Session(auth=auth)
   
   return session
 
