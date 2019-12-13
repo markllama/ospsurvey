@@ -127,7 +127,8 @@ def collect_services(ksclient):
   """
   services = ksclient.services.list()
 
-  print(json.dumps(services))
+  service_list = [ json.dumps(s) for s in services ]
+  print(json.dumps(service_list))
 
   return services
 
