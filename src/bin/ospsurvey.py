@@ -129,9 +129,16 @@ def collect_services(ksclient):
   """
   services = ksclient.services.list()
 
-  print(jsonutils.to_primitive(services, level=1, max_depth=1))
-
-  return services
+  serial = []
+  for s in services:
+    serial[-1] = {
+      'id': s.id,
+      'name': s.name,
+      'description': s.description,
+      'enabled': s.enabled
+    }
+  
+  return serial
 
 def confirm_endpoints(ksclient):
   """
