@@ -16,6 +16,8 @@ import sys
 import os
 import json
 
+from oslo_serialization import jsonutils
+
 # Several libraries have moved between Python 2 and 3
 if sys.version_info.major < 3:
   from urlparse import urlparse
@@ -127,7 +129,7 @@ def collect_services(ksclient):
   """
   services = ksclient.services.list()
 
-  print(services)
+  print(jsonutils.dumps(services))
 
   return services
 
