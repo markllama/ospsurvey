@@ -138,7 +138,7 @@ def collect_services(ksclient):
       'enabled': s.enabled
     })
 
-  print(json.dumps(serial))
+  print(json.dumps(serial, indent=2))
   return serial
 
 def confirm_endpoints(ksclient):
