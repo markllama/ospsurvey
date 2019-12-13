@@ -62,7 +62,7 @@ def version(version_file=default_version_file, osp_package=default_osp_package):
     return version_string
 
 
-def version_from_file(version_file):
+def version_from_file(version_filename):
     """
     From OSP 13 on the version release and build numbers are reported in a
     file: /etc/rhosp-release.
@@ -73,7 +73,11 @@ def version_from_file(version_file):
     version_re = re.compile(version_pattern)
     
     # should try and check.  A single line with a newline
-    release_string = open(version_file).read().strip()
+    
+    version_file = open(version_filename)
+    release_string = version_file.read().strip()
+    version_file.close()
+    
     release_match = version_re.match(release_string)
 
     if release_match == None:
@@ -96,6 +100,8 @@ def get_package_info(package_name):
     try:
         package_info = subprocess.check_output(info_command.split(),
                                                stderr=subprocess.STDOUT)
+        package_info = str(package_info)
+        
     except subprocess.CalledProcessError as e:
         print(e)
         package_info = ""
