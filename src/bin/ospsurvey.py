@@ -183,6 +183,9 @@ def url_check(url):
       return True
     else:
       raise err
+  except urllib.URLError as err:
+    print("url error")
+    return False
     
   response_code = query.getcode()
 
