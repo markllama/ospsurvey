@@ -178,6 +178,9 @@ def url_check(url):
     elif err.code == 401:
       print("unauthorized")
       return True
+    elif err.code == 404:
+      print("not found")
+      return True
     else:
       raise err
     
