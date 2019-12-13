@@ -168,7 +168,7 @@ def url_check(url):
 
   try: 
     query = urllib.urlopen(url)
-  except urllib2.HTTPError as err:
+  except urllib.HTTPError as err:
     if err.code == 300:
       print("multiple choice redirect")
       return True
