@@ -172,6 +172,9 @@ def url_check(url):
     if err.code == 300:
       print("multiple choice redirect")
       return True
+    elif err.code == 400:
+      print("bad request")
+      return True
     elif err.code == 401:
       print("unauthorized")
       return True
