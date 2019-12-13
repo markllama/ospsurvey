@@ -150,7 +150,6 @@ def confirm_endpoints(ksclient):
       print("- HOST ERROR")
 
     url_status = url_check(endpoint.url)
-
     if url_status:
       print("- ENDPOINT OK")
     else:
@@ -167,7 +166,15 @@ def ping_test(host, count=1):
 
 def url_check(url):
 
-  query = urllib.urlopen(url)
+  try: 
+    query = urllib.urlopen(url)
+  except urllib2.HTTPError as err:
+    if err.code == 300:
+      print("multiple choice redirect")
+      return True
+    else:
+      raise err
+    
   response_code = query.getcode()
 
   return response_code == 200 
