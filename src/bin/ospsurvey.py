@@ -129,7 +129,7 @@ def collect_services(ksclient):
   """
   services = ksclient.services.list()
 
-  print(jsonutils.dumps(services, level=1))
+  print(jsonutils.to_primative(services, level=1))
 
   return services
 
