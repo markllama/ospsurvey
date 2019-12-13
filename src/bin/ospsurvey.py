@@ -121,6 +121,15 @@ def create_keystone_session(credentials):
   
   return session
 
+def collect_services(ksclient):
+  """
+  Query and return the set of admin services
+  """
+  services = ksclient.services.list()
+
+  print(services)
+
+  return services
 
 def confirm_endpoints(ksclient):
   """
@@ -235,6 +244,8 @@ if __name__ == "__main__":
   print("creating keystone client")
   ks = keystoneclient.client.Client(session=ks_session)
 
+  services = collect_services(ks)
+  
   # using the keystone client, check the service endpoints
   confirm_endpoints(ks)
   
