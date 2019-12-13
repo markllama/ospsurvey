@@ -131,12 +131,12 @@ def collect_services(ksclient):
 
   serial = []
   for s in services:
-    serial[-1] = {
+    serial.append({
       'id': s.id,
       'name': s.name,
       'description': s.description,
       'enabled': s.enabled
-    }
+    })
   
   return serial
 
