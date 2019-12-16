@@ -4,22 +4,21 @@ The services available.
 """
 import subprocess
 import json
-from collection import namedtuple
+from collections import namedtuple
 
-from ../deunicode import decode_dict
+from ospsurvey.deunicode import decode_dict
 
-def list_services():
+def list_services(source_fn=subprocess.check_output):
   """
   """
   query_string = "openstack service list --long --format json"
-  service_string = subprocess.check_output(query_string.split())
+  service_string = source_fn(query_string.split())
   service_list = json.loads(service_string, object_hook=decode_dict)
   return service_list
 
 
-def get_service(id_or_name):
+def get_service(id_or_name, source_fn=subprocess.check_output):
   query_string = "openstack service show --format json {}".format(id_or_name)
-  service_string = subprocess.check_output(query_string.split())
-  print service_string
+  service_string = source_fn(query_string.split())
   service_info = json.loads(service_string, object_hook=decode_dict)
   return service_info
