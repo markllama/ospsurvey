@@ -1,43 +1,23 @@
 """
-Collect the survey information
+Collect various OSP profile data
 """
 
-import os
-import platform
+# Keystone
+# + services
 
-from keystoneauth1 import loading
-from keystoneauth1 import session
-from heatclient import client
+#   + endpoints
 
-import version
+# Neutron
+# + networks
 
-def osp_auth():
-  """
-  Establish a connection to the OSP undercloud instance
-  """
+#   + subnets
 
-  if 'OS_IDENTITY_API_VERSION' in os.environ.keys():
-    identity_api_version = int(os.environ['OS_IDENTITY_API_VERSION'])
-  else:
-    identity_api_version = 2
+#     + ports
 
-  return osp_auth
+# Ironic
+# - baremetal
+#    + nodes
+#    + ports
+
+def collect(session):
   
-
-def collect():
-
-  osp_creds = osp_auth()
-  
-  data = {}
-
-  os = platform.linux_distribution()
-  
-  data['os'] = {
-    'distro': os[0],
-    'release': os[1]
-  }
-
-  osp = version.version()
-
-  data['osp'] = osp
-  return data
