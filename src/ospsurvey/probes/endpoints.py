@@ -39,3 +39,12 @@ def get_endpoint(id_or_name, source_fn=subprocess.check_output):
   
   return endpoint
 
+
+def check_endpoint(endpoint):
+  """
+  Given an endpoint object, verify that the endpoint is responding to queries
+  """
+
+  pass
+  
+
