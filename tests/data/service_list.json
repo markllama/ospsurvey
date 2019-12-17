@@ -1,0 +1,93 @@
+[
+  {
+    "Enabled": true, 
+    "Description": "Neutron Networking Service", 
+    "Type": "network", 
+    "ID": "1013620c412d4ac6960056b0c7cab7bb", 
+    "Name": "neutron"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "OpenStack Identity Service", 
+    "Type": "identity", 
+    "ID": "180c482eb3eb4752b527facc3e6be33a", 
+    "Name": "keystone"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Ironic Bare Metal Provisioning Service", 
+    "Type": "baremetal", 
+    "ID": "2e69fe295c814f41a467e896d8d87366", 
+    "Name": "ironic"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack Object-Store Service", 
+    "Type": "object-store", 
+    "ID": "303b2a761f0b4641a0adae70a865c162", 
+    "Name": "swift"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack Orchestration Service", 
+    "Type": "orchestration", 
+    "ID": "6d73ab09cd244074b75eff2d68576881", 
+    "Name": "heat"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Bare Metal Introspection Service", 
+    "Type": "baremetal-introspection", 
+    "ID": "6db25d22f5854b11a58ee959f14cb20c", 
+    "Name": "ironic-inspector"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "OpenStack Image Service", 
+    "Type": "image", 
+    "ID": "6eaf75e849e94542b593ddc14fe808e0", 
+    "Name": "glance"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "OpenStack Workflow Service", 
+    "Type": "workflowv2", 
+    "ID": "98296aaf472c4afb93a1f8701396000b", 
+    "Name": "mistral"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack Compute Service", 
+    "Type": "compute", 
+    "ID": "c1cdf8906ae2407f875eaab8443ed562", 
+    "Name": "nova"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack messaging Service", 
+    "Type": "messaging", 
+    "ID": "ea73bfd2cf5f43b38190ca9b21fe0f30", 
+    "Name": "zaqar"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack Placement Service", 
+    "Type": "placement", 
+    "ID": "eae2bd0737e94e7bb538d3f193eca29d", 
+    "Name": "placement"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack messaging websocket Service", 
+    "Type": "messaging-websocket", 
+    "ID": "ef3c6567786f4416bb4c7dc1db4e9f1e", 
+    "Name": "zaqar-websocket"
+  }, 
+  {
+    "Enabled": true, 
+    "Description": "Openstack Cloudformation Service", 
+    "Type": "cloudformation", 
+    "ID": "f76d2d4426b84d4fa8b56aa9cf0d78a1", 
+    "Name": "heat-cfn"
+  }
+]

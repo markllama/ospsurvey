@@ -1,0 +1,7 @@
+{
+  "type": "compute", 
+  "enabled": true, 
+  "description": "Openstack Compute Service", 
+  "name": "nova", 
+  "id": "c1cdf8906ae2407f875eaab8443ed562"
+}
