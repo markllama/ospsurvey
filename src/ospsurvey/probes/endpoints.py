@@ -14,9 +14,16 @@ def list_endpoints(source_fn=subprocess.check_output):
   """
   query_string = "openstack service list --long --format json"
   endpoint_string = source_fn(query_string.split())
-  endpoint_list = json.loads(endpoint_string, object_hook=decode_dict)
-  
-  return endpoint_list
+  endpoint_data = json.loads(endpoint_string, object_hook=decode_dict)
+
+  if len(endpoint_data) == 0:
+    return []
+
+  EpClass = namedtuple('Endpoint', endpoint_data[0].keys())
+
+  # each element needs to be turned into a named tuple
+  endpoints = [EpClass._make(ep.values()) for ep in endpoint_data]
+  return endpoints
 
 
 def get_endpoint(id_or_name, source_fn=subprocess.check_output):
@@ -26,5 +33,9 @@ def get_endpoint(id_or_name, source_fn=subprocess.check_output):
   query_string = "openstack endpoint show --format json {}".format(id_or_name)
   endpoint_string = source_fn(query_string.split())
   endpoint_info = json.loads(endpoint_string, object_hook=decode_dict)
-  return endpoint_info
+
+  EpClass = namedtuple('Endpoint', endpoint_info.keys())
+  endpoint = EpClass._make(endpoint_info.values())
+  
+  return endpoint
 
