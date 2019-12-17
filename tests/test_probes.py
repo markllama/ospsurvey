@@ -6,6 +6,7 @@ import unittest
 
 import ospsurvey.probes.services
 import ospsurvey.probes.endpoints
+import ospsurvey.probes.nodes
 
 
 class TestProbes(unittest.TestCase):
@@ -28,3 +29,10 @@ class TestProbes(unittest.TestCase):
 
   def test_endpoints_get(self):
     s = ospsurvey.probes.endpoints.get_endpoint('f776829dcb7e4f25a2aadd588246f9c9')
+
+
+  def test_nodes_list(self):
+    s = ospsurvey.probes.nodes.list_nodes()
+
+  def test_nodes_get(self):
+    s = ospsurvey.probes.nodes.get_node('node1')
