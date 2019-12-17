@@ -11,9 +11,9 @@ def decode_list(data):
         if isinstance(item, unicode):
             item = item.encode('utf-8')
         elif isinstance(item, list):
-            item = _decode_list(item)
+            item = decode_list(item)
         elif isinstance(item, dict):
-            item = _decode_dict(item)
+            item = decode_dict(item)
         rv.append(item)
     return rv
 
@@ -25,9 +25,9 @@ def decode_dict(data):
         if isinstance(value, unicode):
             value = value.encode('utf-8')
         elif isinstance(value, list):
-            value = _decode_list(value)
+            value = decode_list(value)
         elif isinstance(value, dict):
-            value = _decode_dict(value)
+            value = decode_dict(value)
         rv[key] = value
     return rv
 
