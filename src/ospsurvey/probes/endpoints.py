@@ -12,7 +12,7 @@ def list_endpoints(source_fn=subprocess.check_output, interface=None):
   Get a list of services in JSON format and convert it to a named tuple
   that can be used as a object for analysis
   """
-  query_string = "openstack service list --long --format json"
+  query_string = "openstack endpoint list --long --format json"
   if interface != None:
     query_string += " --interface {}".format(interface)
   
