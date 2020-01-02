@@ -7,12 +7,15 @@ from collections import namedtuple
 
 from ospsurvey.deunicode import decode_dict
 
-def list_endpoints(source_fn=subprocess.check_output):
+def list_endpoints(source_fn=subprocess.check_output, interface=None):
   """
   Get a list of services in JSON format and convert it to a named tuple
   that can be used as a object for analysis
   """
   query_string = "openstack service list --long --format json"
+  if interface != None:
+    query_string += "--interface {}".format(interface)
+  
   endpoint_string = source_fn(query_string.split())
   endpoint_data = json.loads(endpoint_string, object_hook=decode_dict)
 
