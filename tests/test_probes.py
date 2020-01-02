@@ -28,10 +28,9 @@ class TestProbes(unittest.TestCase):
 
     self.assertGreater(len(s), 0, "No endpoints present or reported")
 
-    self.endpoints = s
-    
   def test_endpoints_get(self):
-    s = ospsurvey.probes.endpoints.get_endpoint(self.endpoints[0].ID)
+    endpoints = ospsurvey.probes.endpoints.list_endpoints()
+    s = ospsurvey.probes.endpoints.get_endpoint(endpoints[0].ID)
 
 
   def test_nodes_list(self):
