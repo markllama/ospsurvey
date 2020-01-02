@@ -22,7 +22,7 @@ def list_endpoints(source_fn=subprocess.check_output, interface=None):
   if len(endpoint_data) == 0:
     return []
 
-  EpClass = namedtuple('Endpoint', endpoint_data[0].keys())
+  EpClass = namedtuple('Endpoint', endpoint_data[0].keys().replace(' ', '_'))
 
   # each element needs to be turned into a named tuple
   endpoints = [EpClass._make(ep.values()) for ep in endpoint_data]
