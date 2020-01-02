@@ -35,7 +35,9 @@ class TestProbes(unittest.TestCase):
     e = ospsurvey.probes.endpoints.get_endpoint(endpoints[0].ID)
 
   def test_nodes_list(self):
-    s = ospsurvey.probes.nodes.list_nodes()
+    n = ospsurvey.probes.nodes.list_nodes()
+    self.assertGreater(len(n), 0, "No nodes present or reported")
 
   def test_nodes_get(self):
-    s = ospsurvey.probes.nodes.get_node('node1')
+    nodes = ospsurvey.probes.nodes.list_nodes()
+    n = ospsurvey.probes.nodes.get_node(nodes[0].Name)
