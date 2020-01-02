@@ -20,8 +20,10 @@ def list_services(source_fn=subprocess.check_output):
   if len(service_records) == 0:
     return []
 
-  ServiceClass = namedtuple("ServiceClass",
-                            service_records[0].keys().replace(' ', "_"))
+  ServiceClass = namedtuple(
+    "ServiceClass",
+    [s.replace(' ', '_') for s in service_records[0].keys()]
+  )
   services = [ServiceClass._make(s.values()) for s in service_records]
   return services
 
