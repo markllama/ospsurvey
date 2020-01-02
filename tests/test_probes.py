@@ -17,21 +17,22 @@ class TestProbes(unittest.TestCase):
   def test_services_list(self):
 
     s = ospsurvey.probes.services.list_services()
+    self.assertGreater(len(s), 0, "No services present or reported")
 
 
   def test_services_get(self):
-    s = ospsurvey.probes.services.get_service('nova')
+    services = ospsurvey.probes.services.list_services()
+    s = ospsurvey.probes.services.get_service(services[0].Name)
 
   def test_endpoints_list(self):
 
-    s = ospsurvey.probes.endpoints.list_endpoints()
+    e = ospsurvey.probes.endpoints.list_endpoints()
 
-    self.assertGreater(len(s), 0, "No endpoints present or reported")
+    self.assertGreater(len(e), 0, "No endpoints present or reported")
 
   def test_endpoints_get(self):
     endpoints = ospsurvey.probes.endpoints.list_endpoints(interface="public")
-    s = ospsurvey.probes.endpoints.get_endpoint(endpoints[0].ID)
-
+    e = ospsurvey.probes.endpoints.get_endpoint(endpoints[0].ID)
 
   def test_nodes_list(self):
     s = ospsurvey.probes.nodes.list_nodes()
