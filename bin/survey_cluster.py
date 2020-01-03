@@ -136,9 +136,6 @@ if __name__ == "__main__":
     logging.debug('no profile found: {} does not exist'.format(profile_filename))
     profile = None
 
-
-  #print(json.dumps(profile))
-
   #
   # Now we know what release we're working with and have read the survey profile
   # for the release.  The profile indicates what we should find in a nominal
