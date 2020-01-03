@@ -15,6 +15,9 @@ import yaml
 # import json
 
 import ospsurvey.probes.services
+import ospsurvey.probes.endpoints
+import ospsurvey.probes.servers
+import ospsurvey.probes.nodes
 
 # This pattern should match the OSP version string in /etc/rhosp-release
 DEFAULTS = {
@@ -146,6 +149,8 @@ if __name__ == "__main__":
 
   # get the list of undercloud services
   services = ospsurvey.probes.services.list_services()
-
+  endpoints = ospsurvey.probes.endpoints.list_endpoints()
+  servers = ospsurvey.probes.servers.list_servers()
+  nodes = ospsurvey.probes.nodes.list_nodes()
   # get the list of 
   # get the list of overcloud servers
