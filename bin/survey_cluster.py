@@ -152,5 +152,14 @@ if __name__ == "__main__":
   endpoints = ospsurvey.probes.endpoints.list_endpoints()
   servers = ospsurvey.probes.servers.list_servers()
   nodes = ospsurvey.probes.nodes.list_nodes()
-  # get the list of 
-  # get the list of overcloud servers
+
+  # Questions we can now answer:
+
+  # do all expected services exist?
+  # are all present services active?
+  # to all services have required endpoints?
+  # are all services responding on the accessable interfaces?
+  #   admin, internal, public
+
+  # are all nodes in use?
+  # what profile matches each server
