@@ -74,7 +74,8 @@ if __name__ == "__main__":
   config_file = opts.config
   release_file = opts.release_file
 
-  logging.basicConfig(level=logging.DEBUG)
+  if debug:
+    logging.basicConfig(level=logging.DEBUG)
 
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
