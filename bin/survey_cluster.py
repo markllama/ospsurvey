@@ -133,7 +133,7 @@ if __name__ == "__main__":
     profile = yaml.load(profile_stream, Loader=yaml.Loader)
 
   else:
-    logging.debug('no profile found: {} does not exist'.format(profile_stream))
+    logging.debug('no profile found: {} does not exist'.format(profile_filename))
     profile = None
 
 
