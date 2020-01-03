@@ -5,6 +5,7 @@ Survey a Red Hat OpenStack Platform deployment
 from __future__ import print_function
 
 import argparse
+import json
 import logging
 import os
 import re
@@ -13,7 +14,7 @@ import yaml
 # import argparse
 # import json
 
-# import ospsurvey
+import ospsurvey.probes.services
 
 # This pattern should match the OSP version string in /etc/rhosp-release
 DEFAULTS = {
@@ -40,6 +41,8 @@ def get_cli_arguments():
   parser.add_argument('-V', '--require-env', dest="require_env", action='store_true', default=True)
   parser.add_argument('--no-require-env', dest="require_env", action='store_false')
 
+  parser.add_argument('-P', '--profile-dir', default="./profiles")
+  
   return parser.parse_args()
 
 def check_credentials():
@@ -115,7 +118,37 @@ if __name__ == "__main__":
     sys.exit(1)
 
   logging.debug(release_data.groups())
-
   (major, minor, build) = release_data.groups()[2:5]
 
+  #
+  # If it exists, read the cluster profile for the indicated version
+  #
   
+  profile_filename = os.path.join(opts.profile_dir, "osp-{}.yaml".format(major))
+  logging.debug("profile for OSP {}: {}".format(major, profile_filename))
+
+  if os.path.exists(profile_filename):
+    logging.debug("reading profile for OSP {}: {}".format(major, profile_filename))
+    profile_stream = open(profile_filename)
+    profile = yaml.load(profile_stream, Loader=yaml.Loader)
+
+  else:
+    logging.debug('no profile found: {} does not exist'.format(profile_stream))
+    profile = None
+
+
+  #print(json.dumps(profile))
+
+  #
+  # Now we know what release we're working with and have read the survey profile
+  # for the release.  The profile indicates what we should find in a nominal
+  # deployment.
+  #
+  # start examining the cluster
+  #
+
+  # get the list of undercloud services
+  services = ospsurvey.probes.services.list_services()
+
+  # get the list of 
+  # get the list of overcloud servers
