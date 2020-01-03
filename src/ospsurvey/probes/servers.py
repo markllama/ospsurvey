@@ -8,7 +8,7 @@ from collections import namedtuple
 
 from ospsurvey.deunicode import decode_dict
 
-def list_services(source_fn=subprocess.check_output):
+def list_servers(source_fn=subprocess.check_output):
   """
   Get a list of servers in JSON format and convert it to a named tuple
   that can be used as a object for analysis
