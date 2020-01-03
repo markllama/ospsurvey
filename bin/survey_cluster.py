@@ -11,8 +11,6 @@ import os
 import re
 import sys
 import yaml
-# import argparse
-# import json
 
 import ospsurvey.probes.services
 import ospsurvey.probes.endpoints
