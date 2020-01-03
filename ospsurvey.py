@@ -37,8 +37,34 @@ def get_cli_arguments():
   parser.add_argument('-d', '--debug', action='store_true', default=False)
   parser.add_argument('-c', '--config', default="~/.ospsurvey.yaml")
   parser.add_argument('-r', '--release-file', default="/etc/rhosp-release")
+  parser.add_argument('-V', '--require-env', dest="require_env", action='store_true', default=True)
+  parser.add_argument('--no-require-env', dest="require_env", action='store_false')
 
   return parser.parse_args()
+
+def check_credentials():
+  """
+  Check that the OSP credentials have been sourced into the envinronment
+  OS_AUTH_URL
+  OS_USERNAME
+  OS_PASSWORD
+
+  There are others, but use these as canaries
+  """
+
+  required_variables = ('OS_AUTH_URL', 'OS_USERNAME', 'OS_PASSWORD')
+
+  logging.debug("checking openstack auth environment variables")
+  ok = True
+  for var in required_variables:
+    if not var in os.environ:
+      logging.warning("missing required environment variable: {}".format(var))
+      ok = False
+    else:
+      logging.debug("OpenStack Auth Var: {} = {}".format(var, os.environ[var]))
+
+  return ok
+  
 
 if __name__ == "__main__":
 
@@ -50,6 +76,10 @@ if __name__ == "__main__":
 
   logging.basicConfig(level=logging.DEBUG)
 
+  if opts.require_env and check_credentials() is False:
+    logging.fatal("Missing required environment variables: aborting survey")
+    sys.exit(1)
+  
   # load configuration
   if os.path.exists(config_file):
     if debug:
@@ -85,4 +115,6 @@ if __name__ == "__main__":
 
   logging.debug(release_data.groups())
 
-  print('continuing')
+  (major, minor, build) = release_data.groups()[2:5]
+
+  
