@@ -68,8 +68,20 @@ def check_credentials():
       logging.debug("OpenStack Auth Var: {} = {}".format(var, os.environ[var]))
 
   return ok
-  
 
+def check_undercloud_services(services, profile):
+  """
+  Check that the undercloud services match the expected services from the profile
+  """
+
+  # count the services and compare to the expected number
+  service_count_actual = len(services)
+  service_count_expected = len(profile['profile']['undercloud']['services'])
+
+  logging.debug("service count - expected: {}, actual: {}".format(
+    service_count_expected,
+    service_count_actual))
+  
 if __name__ == "__main__":
 
   opts = get_cli_arguments()
@@ -162,3 +174,5 @@ if __name__ == "__main__":
 
   # are all nodes in use?
   # what profile matches each server
+
+  check_undercloud_services()
