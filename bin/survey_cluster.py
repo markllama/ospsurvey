@@ -136,6 +136,7 @@ if __name__ == "__main__":
   else:
     logging.debug('no profile found: {} does not exist'.format(profile_filename))
     profile = None
+  logging.debug(yaml.dumps(profile))
 
   #
   # Now we know what release we're working with and have read the survey profile
