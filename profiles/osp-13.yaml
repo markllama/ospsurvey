@@ -1,0 +1,27 @@
+---
+#
+#Define the characteristics of a well formed operational OSP 13
+#
+profile:
+  name: "Red Hat OSP 13"
+  release:
+    major: 13
+    file: /etc/rhosp-release
+    string: Red Hat OpenStack Platform release 13.{\d}.{\d} (Queens)
+
+  undercloud:
+    services:
+    - "heat"
+    - "keystone"
+    - "ironic-inspector"
+    - "neutron"
+    - "zaqar-websocket"
+    - "placement"
+    - "heat-cfn"
+    - "mistral"
+    - "zaqar"
+    - "glance"
+    - "ironic"
+    - "swift"
+    - "nova"
+
