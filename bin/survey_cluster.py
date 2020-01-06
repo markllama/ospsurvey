@@ -85,7 +85,7 @@ def check_undercloud_services(services, profile):
 
   # check that the list of expected services matches
   service_names_expected = set(service_profile)
-  service_name_actual = set([s.Name for s in services])
+  service_names_actual = set([s.Name for s in services])
 
   services_diff = service_names_expected.symmetric_difference(service_names_actual)
 
