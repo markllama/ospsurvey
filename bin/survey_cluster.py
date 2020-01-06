@@ -76,11 +76,20 @@ def check_undercloud_services(services, profile):
 
   # count the services and compare to the expected number
   service_count_actual = len(services)
-  service_count_expected = len(profile['profile']['undercloud']['services'])
+  service_profile = profile['profile']['undercloud']['services']
+  service_count_expected = len(service_profile)
 
   logging.debug("service count - expected: {}, actual: {}".format(
     service_count_expected,
     service_count_actual))
+
+  # check that the list of expected services matches
+  service_names_expected = set(service_profile)
+  service_name_actual = set([s.Name for s in services])
+
+  services_diff = service_names_expected.symmetric_difference(service_names_actual)
+
+  logging.debug("service differences: {}".format(services_diff))
   
 if __name__ == "__main__":
 
