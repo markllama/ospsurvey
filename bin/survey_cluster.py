@@ -91,7 +91,16 @@ def check_undercloud_services(services, profile):
   extra_services = service_names_actual - service_names_expected
 
   logging.debug("missing services: {}\nextra services: {}".format(missing_services, extra_services))
-  
+
+  return {
+    'count': {
+      'expected': service_count_expected,
+      'actual': service_count_actual
+      },
+    'missing': list(missing_services),
+    'extra': list(extra_services)
+    }
+
 if __name__ == "__main__":
 
   opts = get_cli_arguments()
