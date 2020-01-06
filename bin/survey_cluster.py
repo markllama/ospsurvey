@@ -84,7 +84,7 @@ def check_undercloud_services(services, profile):
     service_count_actual))
 
   # check that the list of expected services matches
-  service_names_expected = set(service_profile)
+  service_names_expected = set(service_profile['profile'])
   service_names_actual = set(s.Name for s in services)
 
   missing_services = service_names_expected - service_names_actual
