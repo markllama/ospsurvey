@@ -87,9 +87,10 @@ def check_undercloud_services(services, profile):
   service_names_expected = set(service_profile)
   service_names_actual = set([s.Name for s in services])
 
-  services_diff = service_names_expected.symmetric_difference(service_names_actual)
+  missing_services = service_names_expected - service_names_actual
+  extra_services = service_names_actual - service_names_expected
 
-  logging.debug("service differences: {}".format(services_diff))
+  logging.debug("missing services: {}\nextra services: ()".format(missing_services, extra_services))
   
 if __name__ == "__main__":
 
