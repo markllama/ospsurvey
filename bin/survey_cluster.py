@@ -133,7 +133,7 @@ def resolve_host_roles(servers, hostname_map):
   # invert the HostnameMap so the hostname is the key and the
   # node label hint is the value:
   logging.debug(hostname_map)
-  node_label_map = {v:k for (k,v) in hostname_map}
+  node_label_map = {v:k for (k,v) in hostname_map.items()}
   logging.debug(node_label_map)
   # Get all of the *Hints structures
   #  Get the role names from them
