@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
   # get overcloud stack name
   stacks = ospsurvey.probes.stack.list_stacks()
-  stack_name = stacks[0].Name
+  stack_name = stacks[0].Stack_Name
   
   # get overcloud stack environment
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
