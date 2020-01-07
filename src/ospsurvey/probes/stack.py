@@ -32,7 +32,7 @@ def get_environment(stack_name, source_fn=subprocess.check_output):
   """
   Retrieve and parse the stack environment for the overcloud stack
   """
-  query_string = "openstack overcloud environment show --format json"
+  query_string = "openstack stack environment show --format json {}".format(stack_name)
   env_string = source_fn(query_string.split())
   env_records = json.loads(env_string, object_hook=decode_dict)
 
