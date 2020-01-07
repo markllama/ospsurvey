@@ -118,7 +118,8 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
     logging.debug(json.dumps(template_data))
 
     # check if it has hints.
-    hint_keys = [k for k in template_data['parameter_defaults'].keys() if k.endswith("Hints")]
+    if 'parameter_defaults' in template_data:
+      hint_keys = [k for k in template_data['parameter_defaults'].keys() if k.endswith("Hints")]
     
   
 
