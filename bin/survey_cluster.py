@@ -16,6 +16,7 @@ import ospsurvey.probes.services
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.servers
 import ospsurvey.probes.nodes
+import ospsurvey.probes.stack
 
 # This pattern should match the OSP version string in /etc/rhosp-release
 DEFAULTS = {
@@ -122,6 +123,10 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
         logging.debug(json.dumps(template_data))
 
     
+def read_stack_environment():
+  """
+  Get the environment from the overcloud stack
+  """
   
 
 if __name__ == "__main__":
@@ -218,4 +223,12 @@ if __name__ == "__main__":
   # what profile matches each server
   
   check_undercloud_services(services, profile)
-  read_profile_hints()
+
+  # get overcloud stack name
+  stacks = ospsurvey.probes.stack.list_stacks()
+  stack_name = stacks[0].Name
+  
+  # get overcloud stack environment
+  stack_env = ospsurvey.probes.stack.get_environment(stack_name)
+  
+  #read_profile_hints()
