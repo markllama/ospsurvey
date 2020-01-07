@@ -40,5 +40,5 @@ def get_environment(stack_name, source_fn=subprocess.check_output):
     "StackEnvClass",
     [s.replace(' ', '_') for s in env_records.keys()]
   )
-  stack_env = StackClass._make(env_records.values())
+  stack_env = StackEnvClass._make(env_records.values())
   return stack_env
