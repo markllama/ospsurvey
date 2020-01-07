@@ -113,7 +113,7 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
 
   # find any hints
   for filename in template_files:
-    template_data = yaml.load(open(filename))
+    template_data = yaml.load(open(os.path.join(template_dir, filename)))
     
   
 
