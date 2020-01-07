@@ -115,6 +115,8 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
   for filename in template_files:
     template_data = yaml.load(open(os.path.join(template_dir, filename)))
 
+    logger.debug(json.dumps(template_data))
+    
     # check if it has hints.
     hints = {k:v for (k,v) in template_data['parameter_defaults'] if k.endswith("Hints")}
     
