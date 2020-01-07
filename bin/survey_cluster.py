@@ -123,10 +123,22 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
         logging.debug(json.dumps(template_data))
 
     
-def read_stack_environment():
+def resolve_host_roles(servers, hostname_map):
   """
-  Get the environment from the overcloud stack
+  Use the stack environment to identify server hosts and roles for them
   """
+  # use the HostnameMap and *SchedulerHints to determine the role of each
+  # server
+  #
+  # invert the HostnameMap so the hostname is the key and the
+  # node label hint is the value:
+  node_label_map = {v,k for (k,v) in hostname_map}
+  logging.debug(node_label_map)
+  # Get all of the *Hints structures
+  #  Get the role names from them
+  #  Get the capabilities:node: pattern strings
+  #for server in servers:
+    
   
 
 if __name__ == "__main__":
@@ -231,5 +243,6 @@ if __name__ == "__main__":
   # get overcloud stack environment
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
 
-  logging.debug(json.dumps(stack_env, indent=2))
+  server_roles = resolve_host_roles(servers, stack_env.parameter_defaults.HostnameMap)
+  
   #read_profile_hints()
