@@ -90,7 +90,7 @@ def check_undercloud_services(services, profile):
   missing_services = service_names_expected - service_names_actual
   extra_services = service_names_actual - service_names_expected
 
-  logging.debug("missing services: {}\nextra services: {}".format(missing_services, extra_services))
+  logging.debug("\n - missing services: {}\n- extra services: {}".format(missing_services, extra_services))
 
   return {
     'count': {
@@ -100,6 +100,17 @@ def check_undercloud_services(services, profile):
     'missing': list(missing_services),
     'extra': list(extra_services)
     }
+
+def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates")):
+  """
+  Find the list of defined profiles and any assignment hints from the templates
+  """
+
+  # read the template files and find any files and structures that contain Hints
+  # find the
+  template_files = [tf in os.listdir(template_dir) if tf.endswith(".yaml")]
+  logging.debug("found {} yaml files in template dir {}".format(len(template_files), template_dir))
+  
 
 if __name__ == "__main__":
 
