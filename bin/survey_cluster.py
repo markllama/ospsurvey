@@ -204,5 +204,6 @@ if __name__ == "__main__":
 
   # are all nodes in use?
   # what profile matches each server
-
+  
   check_undercloud_services(services, profile)
+  read_profile_hints()
