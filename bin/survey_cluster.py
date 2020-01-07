@@ -230,5 +230,6 @@ if __name__ == "__main__":
   
   # get overcloud stack environment
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
-  
+
+  logging.debug(json.dumps(stack_env))
   #read_profile_hints()
