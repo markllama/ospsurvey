@@ -110,6 +110,11 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
   # find the
   template_files = [tf for tf in os.listdir(template_dir) if tf.endswith(".yaml")]
   logging.debug("found {} yaml files in template dir {}".format(len(template_files), template_dir))
+
+  # find any hints
+  for filename in template_files:
+    template_data = yaml.load(open(filename))
+    
   
 
 if __name__ == "__main__":
