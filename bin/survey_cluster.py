@@ -243,6 +243,6 @@ if __name__ == "__main__":
   # get overcloud stack environment
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
 
-  server_roles = resolve_host_roles(servers, stack_env.parameter_defaults.HostnameMap)
+  server_roles = resolve_host_roles(servers, stack_env.parameter_defaults['HostnameMap'])
   
   #read_profile_hints()
