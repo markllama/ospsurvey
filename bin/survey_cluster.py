@@ -108,7 +108,7 @@ def read_profile_hints(template_dir=os.path.join(os.environ['HOME'], "templates"
 
   # read the template files and find any files and structures that contain Hints
   # find the
-  template_files = [tf in os.listdir(template_dir) if tf.endswith(".yaml")]
+  template_files = [tf for tf in os.listdir(template_dir) if tf.endswith(".yaml")]
   logging.debug("found {} yaml files in template dir {}".format(len(template_files), template_dir))
   
 
