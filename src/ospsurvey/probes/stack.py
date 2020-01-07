@@ -25,9 +25,8 @@ def list_stacks(source_fn=subprocess.check_output):
     [s.replace(' ', '_') for s in stack_records[0].keys()]
   )
   stacks = [StackClass._make(s.values()) for s in stack_records]
-  return servers
 
-  return stack_list
+  return stacks
 
 def get_environment(stack_name, source_fn=subprocess.check_output):
   """
