@@ -22,4 +22,8 @@ if __name__ == "__main__":
   node_patterns = {v['capabilities:node']:re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
 
   print(node_patterns)
+
+  nodes = ospsurvey.probes.nodes.list_nodes()
+
+  print(nodes)
   
