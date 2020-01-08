@@ -6,19 +6,6 @@ import re
 import ospsurvey.probes.nodes
 import ospsurvey.probes.stack
 
-def node_capabilities(node):
-  """
-  Return just the dict of capabilities strings from a NodeClass object
-  """
-
-  cap_string = node.Properties['capabilities']
-  cap_entry_strings = cap_string.split(',')
-  cap_entries = map(lambda c: c.split(':'), cap_entry_strings)
-  capabilities = {c[0]:c[1] for c in cap_entries}
-
-  return capabilities
-                    
-
 if __name__ == "__main__":
 
   # list the stacks and get the environment
@@ -32,7 +19,7 @@ if __name__ == "__main__":
 
   print(hints)
   
-  node_patterns = {v['capabilities:node']:re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
+  node_patterns = {re.sub('%index%', '\d+$', v['capabilities:node']):re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
 
   print(node_patterns)
 
