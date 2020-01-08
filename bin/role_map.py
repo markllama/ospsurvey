@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
   # find all of the hints
 
-  hints = {k:v for (k,v) in stack_env.items() if k.endswith("Hints")}
+  hints = [k for k in stack_env.__dict__.keys() if k.endswith("Hints")]
   
