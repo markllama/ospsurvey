@@ -25,5 +25,5 @@ if __name__ == "__main__":
 
   nodes = ospsurvey.probes.nodes.list_nodes()
 
-  print(nodes)
+  node_tags = [{"Name":n.Name, "Properties":n.Properties} for n in nodes]
   
