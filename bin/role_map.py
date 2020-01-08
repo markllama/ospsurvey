@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
   nodes = ospsurvey.probes.nodes.list_nodes()
 
-  node_tags = [{"Name":n.Name, node_capabilities(n)}} for n in nodes]
+  node_tags = [{"Name":n.Name, "Capabilities":node_capabilities(n)} for n in nodes]
 
   print(node_tags)
   
