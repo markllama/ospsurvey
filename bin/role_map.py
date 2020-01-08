@@ -18,9 +18,8 @@ if __name__ == "__main__":
   hints = {k:v for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
 
   print(hints)
-
   
-  node_patterns = {stack_name + '-' + v['capabilities:node']:re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
+  node_patterns = {v['capabilities:node']:re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
 
   print(node_patterns)
   
