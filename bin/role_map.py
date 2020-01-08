@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
   # find all of the hints
 
-  hints = {re.sub('SchedulerHints$', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
+  hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
 
   print(hints)
   
