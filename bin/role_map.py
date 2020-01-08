@@ -27,5 +27,5 @@ if __name__ == "__main__":
 
   node_tags = [{"Name":n.Name, "Properties":n.Properties} for n in nodes]
 
-  print node_tags
+  print(node_tags)
   
