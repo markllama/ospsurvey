@@ -10,7 +10,14 @@ def node_capabilities(node):
   """
   Return just the dict of capabilities strings from a NodeClass object
   """
-  return node.Properties['capabilities']
+
+  cap_string = node.Properties['capabilities']
+  cap_entry_strings = cap_string.split(',')
+  cap_entries = map(lambda c: c.split(':'), cap_entry_strings)
+  capabilities = {c[0]:c[1] for c in cap_entries}
+
+  return capabilities
+                    
 
 if __name__ == "__main__":
 
