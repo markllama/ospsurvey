@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
   print(hints)
 
-  node_patterns = {v['capabilities:node']:k for (k,v) in hints}
+  node_patterns = {v['capabilities:node']:k for (k,v) in hints.items()}
 
   print(node_patterns)
   
