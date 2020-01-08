@@ -45,5 +45,5 @@ if __name__ == "__main__":
   print(node_tags)
 
   for n in nodes:
-    print(node_role(n, hints))
+    print(node_role(n, node_patterns))
   
