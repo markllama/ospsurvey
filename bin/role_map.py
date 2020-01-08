@@ -6,6 +6,12 @@ import re
 import ospsurvey.probes.nodes
 import ospsurvey.probes.stack
 
+def node_capabilities(node):
+  """
+  Return just the dict of capabilities strings from a NodeClass object
+  """
+  return node.Properties['capabilities']
+
 if __name__ == "__main__":
 
   # list the stacks and get the environment
@@ -25,7 +31,7 @@ if __name__ == "__main__":
 
   nodes = ospsurvey.probes.nodes.list_nodes()
 
-  node_tags = [{"Name":n.Name, "Capabilities":n.Properties['capabilities']} for n in nodes]
+  node_tags = [{"Name":n.Name, node_capabilities(n)} for n in nodes]
 
   print(node_tags)
   
