@@ -6,6 +6,20 @@ import re
 import ospsurvey.probes.nodes
 import ospsurvey.probes.stack
 
+def node_role(node, hints):
+  """
+  Given a node and the hints map, return the role for a node
+  NOTE: this is very inefficient as it compiles the re's every pass
+  """
+
+  tag = node.Properties['capabilities']['node']
+  
+  for p in hints.keys():
+    if re.match(p, tag):
+      return hints[p]
+
+  return None
+  
 if __name__ == "__main__":
 
   # list the stacks and get the environment
@@ -19,7 +33,7 @@ if __name__ == "__main__":
 
   print(hints)
   
-  node_patterns = {re.sub('%index%', '\\d+$', v['capabilities:node']):re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
+  node_patterns = {re.sub('%index%', '\d+$', v['capabilities:node']):re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
 
   print(node_patterns)
 
@@ -28,4 +42,7 @@ if __name__ == "__main__":
   node_tags = [{"Name":n.Name, "Capabilities":n.Properties['capabilities']} for n in nodes]
 
   print(node_tags)
+
+  for n in nodes:
+    print node_role(n, hints)
   
