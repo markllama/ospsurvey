@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
   print(hints)
   
-  node_patterns = {re.sub('%index%', '\d+$', v['capabilities:node']):re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
+  node_patterns = {re.sub('%index%', '\\d+$', v['capabilities:node']):re.sub('\SchedulerHints$','',k) for (k,v) in hints.items()}
 
   print(node_patterns)
 
