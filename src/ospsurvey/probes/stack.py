@@ -42,3 +42,10 @@ def get_environment(stack_name, source_fn=subprocess.check_output):
   )
   stack_env = StackEnvClass._make(env_records.values())
   return stack_env
+
+def hint_map(stack_env=None):
+  """
+  Get an inverted hint map from the stack environment
+  """
+  # Collect the hints
+  pass
