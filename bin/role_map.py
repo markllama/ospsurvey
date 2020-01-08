@@ -42,8 +42,6 @@ if __name__ == "__main__":
 
   node_tags = [{"Name":n.Name, "Capabilities":n.Properties['capabilities']} for n in nodes]
 
-  print(node_tags)
+  node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
 
-  for n in nodes:
-    print(node_role(n, node_patterns))
-  
+  print(node_roles)
