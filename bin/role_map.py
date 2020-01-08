@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
   # find all of the hints
 
-  hints = {k:v for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
+  hints = {k:v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
 
   print(hints)
   
