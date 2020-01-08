@@ -15,4 +15,8 @@ if __name__ == "__main__":
   hints = {k:v for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
 
   print(hints)
+
+  node_patterns = {v['capabilities:node']:k for (k,v) in hints}
+
+  print(node_patterns)
   
