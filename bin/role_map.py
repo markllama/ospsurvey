@@ -3,7 +3,7 @@ from __future__ import print_function
 
 import re
 
-import ospsurvey.probes.node
+import ospsurvey.probes.nodes
 import ospsurvey.probes.stack
 
 if __name__ == "__main__":
