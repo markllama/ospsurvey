@@ -34,6 +34,24 @@ def get_node(id_or_name, source_fn=subprocess.check_output):
   node_info = json.loads(node_string, object_hook=decode_dict)
 
   NodeClass = namedtuple("NodeClass", node_info.keys())
+
   node = NodeClass._make(node_info.values())
+
+  node.Properties['capabilities'] = node_capabilities(node)
   
   return node
+
+
+def node_capabilities(node):
+  """
+  Return just the dict of capabilities strings from a NodeClass object
+  """
+
+  cap_string = node.Properties['capabilities']
+  cap_entry_strings = cap_string.split(',')
+  cap_entries = map(lambda c: c.split(':'), cap_entry_strings)
+  capabilities = {c[0]:c[1] for c in cap_entries}
+
+  return capabilities
+                    
+
