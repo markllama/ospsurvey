@@ -24,7 +24,7 @@ def list_nodes(source_fn=subprocess.check_output):
   node_keys = [k.replace(" ", "_") for k in node_records[0].keys()]
   NodeClass = namedtuple("NodeClass", node_keys)
   nodes = [NodeClass._make(s.values()) for s in node_records]
-  for n in nodes
+  for n in nodes:
     n.Properties['capabilities'] = node_capabilities(n)
 
   return nodes
