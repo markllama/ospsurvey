@@ -20,9 +20,13 @@ def list_nodes(source_fn=subprocess.check_output):
   if len(node_records) == 0:
     return []
 
+  for n in node_records:
+    n.Properties['capabilities'] = node_capabilities(n)
+
   node_keys = [k.replace(" ", "_") for k in node_records[0].keys()]
   NodeClass = namedtuple("NodeClass", node_keys)
   nodes = [NodeClass._make(s.values()) for s in node_records]
+
   return nodes
 
 def get_node(id_or_name, source_fn=subprocess.check_output):
