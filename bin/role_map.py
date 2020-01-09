@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import json
 import re
 
 import ospsurvey.probes.nodes
@@ -49,11 +50,11 @@ if __name__ == "__main__":
 
   hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
 
-  print(hints)
+  #print(hints)
   
   node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
 
-  print(node_patterns)
+  #print(node_patterns)
 
   nodes = ospsurvey.probes.nodes.list_nodes()
 
@@ -61,7 +62,7 @@ if __name__ == "__main__":
 
   node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
 
-  print(node_roles)
+  #print(node_roles)
 
   servers = ospsurvey.probes.servers.list_servers()
   
@@ -71,4 +72,4 @@ if __name__ == "__main__":
   server_roles = {get_server_from_node(n,servers).Name:node_roles[n.Name] for n in nodes}
 
   
-  print("Server Roles:\n {}".format(server_roles))
+  print(json.dumps(server_roles))
