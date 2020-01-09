@@ -42,9 +42,10 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
   # BUT, the JSON keys have colons in them that are not allowed
   # And hyphens and spaces.
   # Colons should really create sub-objects
+  
   ServerClass = namedtuple(
     "ServerClass",
-    [s.replace(' ', '_').replace(':', '_').replace('-', '_') for s in server_info.keys()]
+    [s.replace(' ', '_') for s in server_info.keys()]
   )
 
   server = ServerClass._make(server_info.values())
