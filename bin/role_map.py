@@ -68,7 +68,7 @@ if __name__ == "__main__":
   # Now assocate nodes to servers and we'll have a role map for servers
   # For each node, look up the instance UID, then find that instance and
   # get the display name.  Associate the display name with the role
-  server_roles = {get_server_from_node(n,servers):node_roles[n.Name] for n in nodes}
+  server_roles = {get_server_from_node(n,servers).Name:node_roles[n.Name] for n in nodes}
 
   
   print("Server Roles:\n {}".format(server_roles))
