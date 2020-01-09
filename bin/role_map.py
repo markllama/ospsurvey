@@ -4,6 +4,7 @@ from __future__ import print_function
 import re
 
 import ospsurvey.probes.nodes
+import ospsurvey.probes.servers
 import ospsurvey.probes.stack
 
 def node_role(node, hints):
@@ -59,6 +60,8 @@ if __name__ == "__main__":
 
   print(node_roles)
 
+  servers = ospsurvey.probes.servers.list_servers()
+  
   # Now assocate nodes to servers and we'll have a role map for servers
   # For each node, look up the instance UID, then find that instance and
   # get the display name.  Associate the display name with the role
