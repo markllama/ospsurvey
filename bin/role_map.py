@@ -20,6 +20,19 @@ def node_role(node, hints):
       return hints[p]
 
   return None
+
+def get_server_from_node(node, servers):
+  """
+  Given the list of servers and a single node, find the server associated,
+  if any
+  """
+  # get the node instance ID
+  instance_id = node.Instance_UUID
+  node_servers = [s for s in servers if s.ID == instance_id]
+  if len(node_servers) == 0:
+    return None
+
+  return node_servers[0]
   
 if __name__ == "__main__":
 
@@ -45,3 +58,10 @@ if __name__ == "__main__":
   node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
 
   print(node_roles)
+
+  # Now assocate nodes to servers and we'll have a role map for servers
+  # For each node, look up the instance UID, then find that instance and
+  # get the display name.  Associate the display name with the role
+  server_roles = {k:v for (k,v) in nodes}
+
+  print(server_roles)
