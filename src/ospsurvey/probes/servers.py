@@ -43,7 +43,7 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
 
   ServerClass = namedtuple(
     "ServerClass",
-    [s.replace(' ', '_') for s in server_records[0].keys()]
+    [s.replace(' ', '_') for s in server_info.keys()]
   )
 
   server = ServerClass._make(server_info.values())
