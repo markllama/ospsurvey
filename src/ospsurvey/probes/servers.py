@@ -38,7 +38,14 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
   server_string = source_fn(query_string.split())
   server_info = json.loads(server_string, object_hook=decode_dict)
 
-  ServerClass = namedtuple("ServerClass", server_info.keys())
+  # Convert the JSON object to a proper class.
+  # BUT, the JSON keys have colons in them that are not allowed
+
+  ServerClass = namedtuple(
+    "ServerClass",
+    [s.replace(' ', '_') for s in server_records[0].keys()]
+  )
+
   server = ServerClass._make(server_info.values())
   
   return server
