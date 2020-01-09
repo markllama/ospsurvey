@@ -67,4 +67,5 @@ if __name__ == "__main__":
   # get the display name.  Associate the display name with the role
   server_roles = {get_server_from_node(n,servers):node_roles[n.Name] for n in nodes}
 
-  print(server_roles)
+  
+  print("Server Roles:\n {}".format(server_roles))
