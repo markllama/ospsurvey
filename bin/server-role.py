@@ -7,6 +7,7 @@ import logging
 import os
 import sys
 
+import ospsurvey.probes.nodes
 import ospsurvey.probes.servers
 
 def parse_cli():
