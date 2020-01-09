@@ -17,7 +17,7 @@ def node_role(node, hints):
   tag = node.Properties['capabilities']['node']
   
   for p in hints:
-    print("checking hint {} on node {}".format(p, node.Name))
+    #print("checking hint {} on node {}".format(p, node.Name))
     if re.match(p, tag):
       return hints[p]
 
