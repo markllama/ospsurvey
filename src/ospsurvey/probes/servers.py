@@ -45,7 +45,7 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
   # Colons should really create sub-objects
 
   
-  properties = [re.sub('[\ -\:]', '_', s) for s in server_info.keys()]
+  properties = [re.sub('[\- :]', '_', s) for s in server_info.keys()]
   logging.debug("keys: {}".format(server_info.keys()))
   logging.debug("properties: {}".format(properties))
   ServerClass = namedtuple("ServerClass", properties)
