@@ -63,7 +63,7 @@ if __name__ == "__main__":
     sys.exit(1)
 
   if opts.server:
-    server = ospsurvey.probes.server.get_server(opts.server)
+    server = ospsurvey.probes.servers.get_server(opts.server)
     logging.info("Find the role of server {}".format(opts.server))
 
   elif opts.role:
