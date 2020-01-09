@@ -71,5 +71,9 @@ if __name__ == "__main__":
   # get the display name.  Associate the display name with the role
   server_roles = {get_server_from_node(n,servers).Name:node_roles[n.Name] for n in nodes}
 
+  # invert the list: for each role, what hosts are in it?
+  
+  
+
   
   print(json.dumps(server_roles))
