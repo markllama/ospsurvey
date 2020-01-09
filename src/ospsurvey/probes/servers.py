@@ -44,7 +44,9 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
   # And hyphens and spaces.
   # Colons should really create sub-objects
 
+  
   properties = [re.sub('[\ -\:]', '_', s) for s in server_info.keys()]
+  logging.debug("keys: {}".format(server_info.keys()))
   logging.debug("properties: {}".format(properties))
   ServerClass = namedtuple("ServerClass", properties)
 
