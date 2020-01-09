@@ -99,6 +99,8 @@ if __name__ == "__main__":
     logging.debug("found node {} matching server {}".format(node.Name, server.name))
 
     # now find the role of that node
+    stacks = ospsurvey.probes.stack.list_stacks()
+    stack_name = stacks[0].Stack_Name
     stack_env = ospsurvey.probes.stack.get_environment(stack_name)
 
     # find all of the hints
