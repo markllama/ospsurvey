@@ -108,7 +108,8 @@ if __name__ == "__main__":
     hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
     node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
 
-
+    role = node_role(node, node_patterns)
+    print(role)
 
   elif opts.role:
     logging.info("Find the servers with role {}".format(opts.role))
