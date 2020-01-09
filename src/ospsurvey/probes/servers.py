@@ -27,9 +27,6 @@ def list_servers(source_fn=subprocess.check_output):
   servers = [ServerClass._make(s.values()) for s in server_records]
   return servers
 
-  return server_list
-
-
 def get_server(id_or_name, source_fn=subprocess.check_output):
   """
   Get the information about a single server and return a named tuple
@@ -38,6 +35,8 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
   server_string = source_fn(query_string.split())
   server_info = json.loads(server_string, object_hook=decode_dict)
 
+  logging.debug("server_info: {}".format(server_info))
+  
   # Convert the JSON object to a proper class.
   # BUT, the JSON keys have colons in them that are not allowed
   # And hyphens and spaces.
