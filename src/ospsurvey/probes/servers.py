@@ -2,9 +2,10 @@
 Query an openstack service and return an object or list of objects representing
 The services available.
 """
-import subprocess
-import json
 from collections import namedtuple
+import json
+import logging
+import subprocess
 
 from ospsurvey.deunicode import decode_dict
 
