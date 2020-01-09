@@ -80,6 +80,20 @@ if __name__ == "__main__":
     logging.fatal("Missing required environment variables: aborting survey")
     sys.exit(1)
 
+  # ---------------------------------------------------------------------------
+  # Prepare to answer the question: get needed baseline information
+  #   Nodes and hints
+  # ---------------------------------------------------------------------------
+  # now find the role of that node
+  stacks = ospsurvey.probes.stack.list_stacks()
+  stack_name = stacks[0].Stack_Name
+  stack_env = ospsurvey.probes.stack.get_environment(stack_name)
+  # find all of the hints
+  hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
+  node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
+
+  nodes = ospsurvey.probes.nodes.list_nodes()
+
   if opts.server:
     logging.info("Find the role of server {}".format(opts.server))
     server = ospsurvey.probes.servers.get_server(opts.server)
@@ -88,31 +102,24 @@ if __name__ == "__main__":
     # with the server we now have the server id.
     # now we need to find the node that corresponds
     nodes = ospsurvey.probes.nodes.list_nodes()
-    nodes = [n for n in nodes if server.id == n.Instance_UUID]
-    if len(nodes) == 0:
+    one_node = [n for n in nodes if server.id == n.Instance_UUID]
+    if len(one_node) == 0:
       logging.fatal("no node matching server {}".format(server.name))
 
-    if len(nodes) > 1:
-      logging.fatal("ambiguous match: {} nodes matching server {}".format(len(nodes), server.name))
+    if len(one_node) > 1:
+      logging.fatal("ambiguous match: {} nodes matching server {}".format(len(one_node), server.name))
       
     # and then the role of that node
-    node = nodes[0]
+    node = one_node[0]
     logging.debug("found node {} matching server {}".format(node.Name, server.name))
-
-    # now find the role of that node
-    stacks = ospsurvey.probes.stack.list_stacks()
-    stack_name = stacks[0].Stack_Name
-    stack_env = ospsurvey.probes.stack.get_environment(stack_name)
-
-    # find all of the hints
-    hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
-    node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
 
     role = node_role(node, node_patterns)
     print(role)
+    sys.exit(0)
 
-  elif opts.role:
+  if opts.role:
+    # just return all the servers with a given role
     logging.info("Find the servers with role {}".format(opts.role))
-
-  else:
-    logging.info("List all servers and their roles")
+    sys.exit(0)
+    
+  logging.info("List all servers and their roles")
