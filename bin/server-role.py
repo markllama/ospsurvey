@@ -65,6 +65,7 @@ if __name__ == "__main__":
   if opts.server:
     server = ospsurvey.probes.servers.get_server(opts.server)
     logging.info("Find the role of server {}".format(opts.server))
+    logging.debug(json.dumps(server))
 
   elif opts.role:
     logging.info("Find the servers with role {}".format(opts.role))

@@ -40,7 +40,8 @@ def get_server(id_or_name, source_fn=subprocess.check_output):
 
   # Convert the JSON object to a proper class.
   # BUT, the JSON keys have colons in them that are not allowed
-
+  # And hyphens and spaces.
+  # Colons should really create sub-objects
   ServerClass = namedtuple(
     "ServerClass",
     [s.replace(' ', '_').replace(':', '_').replace('-', '_') for s in server_info.keys()]
