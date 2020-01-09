@@ -5,6 +5,7 @@ The services available.
 from collections import namedtuple
 import json
 import logging
+import re
 import subprocess
 
 from ospsurvey.deunicode import decode_dict
