@@ -33,6 +33,9 @@ def get_server_from_node(node, servers):
   if len(node_servers) == 0:
     return None
 
+  if len(node_servers) > 1:
+    return None
+  
   return node_servers[0]
   
 if __name__ == "__main__":
