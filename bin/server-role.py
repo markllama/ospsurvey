@@ -68,6 +68,17 @@ if __name__ == "__main__":
     server = ospsurvey.probes.servers.get_server(opts.server)
     logging.debug(server)
 
+    # with the server we now have the server id.
+    # now we need to find the node that corresponds
+    nodes = ospsurvey.probes.nodes.list_nodes()
+    nodes = [n for n in nodes if server.id == n.Instance_UUID]
+    if len(nodes) == 0:
+      logging.fatal("no node matching server {}".server.Name)
+      
+    # and then the role of that node
+    node = nodes[0]
+    logging.debug("found node {} matching server {}".format(node.Name, server.Name))
+
   elif opts.role:
     logging.info("Find the servers with role {}".format(opts.role))
 
