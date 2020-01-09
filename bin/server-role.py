@@ -9,6 +9,7 @@ import sys
 
 import ospsurvey.probes.nodes
 import ospsurvey.probes.servers
+import ospsurvey.probes.stack
 
 def parse_cli():
   """
@@ -52,6 +53,20 @@ def check_credentials():
 
   return ok
 
+def node_role(node, hints):
+  """
+  Given a node and the hints map, return the role for a node
+  NOTE: this is very inefficient as it compiles the re's every pass
+  """
+
+  tag = node.Properties['capabilities']['node']
+  
+  for p in hints:
+    #print("checking hint {} on node {}".format(p, node.Name))
+    if re.match(p, tag):
+      return hints[p]
+
+  return None
 
 if __name__ == "__main__":
 
@@ -74,11 +89,22 @@ if __name__ == "__main__":
     nodes = ospsurvey.probes.nodes.list_nodes()
     nodes = [n for n in nodes if server.id == n.Instance_UUID]
     if len(nodes) == 0:
-      logging.fatal("no node matching server {}".server.name)
+      logging.fatal("no node matching server {}".format(server.name))
+
+    if len(nodes) > 1:
+      logging.fatal("ambiguous match: {} nodes matching server {}".format(len(nodes), server.name))
       
     # and then the role of that node
     node = nodes[0]
     logging.debug("found node {} matching server {}".format(node.Name, server.name))
+
+    # now find the role of that node
+    stack_env = ospsurvey.probes.stack.get_environment(stack_name)
+
+    # find all of the hints
+    hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
+
+
 
   elif opts.role:
     logging.info("Find the servers with role {}".format(opts.role))
