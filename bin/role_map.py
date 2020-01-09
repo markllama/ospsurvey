@@ -71,4 +71,4 @@ if __name__ == "__main__":
   server_roles = {get_server_from_node(n,servers):node_roles[n.Name] for n in nodes}
 
   
-  print("Server Roles:\n {}".format(server_roles))
+  print("Server Roles:\n {}".format(len(server_roles)))
