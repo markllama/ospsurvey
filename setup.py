@@ -44,7 +44,7 @@ setup(
   package_dir={'': 'src'},
   packages=find_packages(where='src'),
 
-  scripts=['bin/server-role.py'],
+  scripts=['bin/server-role'],
   #python_requires='>=2.7',
 
   test_suite="tests"
