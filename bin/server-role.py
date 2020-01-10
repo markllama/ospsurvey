@@ -16,7 +16,9 @@ def parse_cli():
   """
   Define the CLI arguments for querying a server role
   """
-  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(description="""
+  Get information about OpenStack overcloud servers and roles
+  """)
 
   parser.add_argument('-d', '--debug', action='store_true', default=False,
                       help="Print additional information for status and diagnosis")
