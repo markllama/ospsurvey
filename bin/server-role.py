@@ -147,17 +147,13 @@ if __name__ == "__main__":
   # start to invert the role membership lists
   roles = {r:[] for r in hints.keys()}
   for node in nodes:
-    roles[node_roles[node.Name]].append(servers_by_id[node.Instance_UUID])
+    roles[node_roles[node.Name]].append(servers_by_id[node.Instance_UUID].Name)
 
-  print(roles)
-
-  
-
-  
-  
   if opts.role:
     # just return all the servers with a given role
     logging.info("Find the servers with role {}".format(opts.role))
     sys.exit(0)
     
   logging.info("List all servers and their roles")
+  for r in roles.keys():
+    print("{}:
