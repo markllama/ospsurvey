@@ -26,7 +26,7 @@ def parse_cli():
   selector_group.add_argument('-r', '--role',
                               help="Find the servers under a specified role")
   selector_group.add_argument('-R', '--list-roles', dest="list_roles",
-                              action=store_true, default=False,
+                              action='store_true', default=False,
                               help="list the roles defined for this cluster")
 
   env_group = parser.add_mutually_exclusive_group()
