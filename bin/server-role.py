@@ -152,7 +152,8 @@ if __name__ == "__main__":
   if opts.role:
     # just return all the servers with a given role
     logging.info("Find the servers with role {}".format(opts.role))
+    print(json.dumps(roles[role]))
     sys.exit(0)
     
   logging.info("List all servers and their roles")
-  print(roles)
+  print(json.dumps(roles))
