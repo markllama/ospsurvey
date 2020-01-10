@@ -155,5 +155,4 @@ if __name__ == "__main__":
     sys.exit(0)
     
   logging.info("List all servers and their roles")
-  for r in roles.keys():
-    print("{}:
+  print(roles)
