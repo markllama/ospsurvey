@@ -84,7 +84,9 @@ if __name__ == "__main__":
   # Prepare to answer the question: get needed baseline information
   #   Nodes and hints
   # ---------------------------------------------------------------------------
-  # now find the role of that node
+
+  # The first step is to get the list of roles and the node tagging hints
+  # to map nodes to roles
   stacks = ospsurvey.probes.stack.list_stacks()
   stack_name = stacks[0].Stack_Name
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
@@ -92,6 +94,8 @@ if __name__ == "__main__":
   hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
   node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
 
+  # Get a list of all nodes because you can't easily query a single node by its
+  # instance UUID
   nodes = ospsurvey.probes.nodes.list_nodes()
 
   if opts.server:
@@ -101,7 +105,6 @@ if __name__ == "__main__":
 
     # with the server we now have the server id.
     # now we need to find the node that corresponds
-    nodes = ospsurvey.probes.nodes.list_nodes()
     one_node = [n for n in nodes if server.id == n.Instance_UUID]
     if len(one_node) == 0:
       logging.fatal("no node matching server {}".format(server.name))
@@ -112,11 +115,17 @@ if __name__ == "__main__":
     # and then the role of that node
     node = one_node[0]
     logging.debug("found node {} matching server {}".format(node.Name, server.name))
-
     role = node_role(node, node_patterns)
     print(role)
     sys.exit(0)
 
+  #
+  # We have the list of nodes. We could filter those for the requested role
+  # and then query for the individual servers
+  # Or just get all the servers and filter here.
+  node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
+  servers = ospsurvey.probes.servers.list_servers()
+  
   if opts.role:
     # just return all the servers with a given role
     logging.info("Find the servers with role {}".format(opts.role))
