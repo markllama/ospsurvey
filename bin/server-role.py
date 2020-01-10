@@ -141,7 +141,7 @@ if __name__ == "__main__":
   # Or just get all the servers and filter here.
   node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
   servers = ospsurvey.probes.servers.list_servers()
-  servers_by_id = {s.id:s for s in servers}
+  servers_by_id = {s.Id:s for s in servers}
   
   # start to invert the role membership lists
   roles = {r:[] for r in hints.keys()}
