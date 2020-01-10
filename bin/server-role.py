@@ -69,6 +69,22 @@ def node_role(node, hints):
 
   return None
 
+def get_server_from_node(node, servers):
+  """
+  Given the list of servers and a single node, find the server associated,
+  if any
+  """
+  # get the node instance ID
+  instance_id = node.Instance_UUID
+  node_servers = [s for s in servers if s.ID == instance_id]
+  if len(node_servers) == 0:
+    return None
+
+  if len(node_servers) > 1:
+    return None
+  
+  return node_servers[0]
+
 if __name__ == "__main__":
 
   opts = parse_cli()
@@ -125,8 +141,13 @@ if __name__ == "__main__":
   # Or just get all the servers and filter here.
   node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
   servers = ospsurvey.probes.servers.list_servers()
+  servers_by_id = {s.id:s for s in servers}
+  
+  # start to invert the role membership lists
+  roles = {r:[] for r in hints.keys()}
+  print(roles)
 
-  print(node_roles)
+  
 
   
   
