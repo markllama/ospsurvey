@@ -127,6 +127,7 @@ if __name__ == "__main__":
   servers = ospsurvey.probes.servers.list_servers()
 
   print(hints)
+  print(node_roles)
   
   if opts.role:
     # just return all the servers with a given role
