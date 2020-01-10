@@ -25,6 +25,9 @@ def parse_cli():
                               help="Find the role of a specified server")
   selector_group.add_argument('-r', '--role',
                               help="Find the servers under a specified role")
+  selector_group.add_argument('-R', '--list-roles', dest="list_roles",
+                              action=store_true, default=False,
+                              help="list the roles defined for this cluster")
 
   env_group = parser.add_mutually_exclusive_group()
   env_group.add_argument('-V', '--require-env', dest="require_env", action='store_true', default=True)
@@ -108,6 +111,11 @@ if __name__ == "__main__":
   stack_env = ospsurvey.probes.stack.get_environment(stack_name)
   # find all of the hints
   hints = {re.sub('SchedulerHints$', '', k):v['capabilities:node'] for (k,v) in stack_env.parameter_defaults.items() if k.endswith("Hints")}
+
+  if opts.list_roles:
+    print(json.dumps(hints.keys()))
+    sys.exit(0)
+          
   node_patterns = {re.sub('%index%', '\d+$', v):k for (k,v) in hints.items()}
 
   # Get a list of all nodes because you can't easily query a single node by its
