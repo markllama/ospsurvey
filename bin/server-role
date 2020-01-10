@@ -1,4 +1,15 @@
 #!/bin/env python
+"""
+Query and report server role assignments.
+
+Role assignments are derived from the properties.capabilities node: string.
+This matches a Scheduler Hint pattern that in turn is associated with an 
+overcloud server role.
+
+server-role can report the role for a specified server, the servers associated
+with a given role or the entire role -> server map.
+It can also note nodes that have not been deployed or tagged.
+"""
 from __future__ import print_function
 
 import argparse
