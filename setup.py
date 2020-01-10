@@ -18,7 +18,7 @@ from io import open
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(path.join(here, 'README'), encoding='utf-8') as f:
   long_description = f.read()
   
 setup(
@@ -30,6 +30,7 @@ setup(
   url='https://github.com/markllama/ospsurvey',
   author='Mark Lamourine',
   author_email='markllama@gmail.com',
+  include_package_data=True,
   classifiers=[
     'License :: OSI Approved :: Apache 2.0 License',
     'Programming Language :: Python :: 2',
@@ -43,6 +44,9 @@ setup(
   
   package_dir={'': 'src'},
   packages=find_packages(where='src'),
+  package_data={
+    '.': ['*.txt', '*.rst', '*.md']
+  },
 
   scripts=['bin/server-role'],
   #python_requires='>=2.7',
