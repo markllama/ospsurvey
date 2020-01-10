@@ -18,7 +18,7 @@ def parse_cli():
   """
   parser = argparse.ArgumentParser(description="""
   Get information about Red Hat OpenStack overcloud servers and roles.\n
-
+\n
   All output is JSON for further processing
   """)
 
