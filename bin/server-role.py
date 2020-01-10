@@ -125,6 +125,8 @@ if __name__ == "__main__":
   # Or just get all the servers and filter here.
   node_roles = {n.Name:node_role(n, node_patterns) for n in nodes}
   servers = ospsurvey.probes.servers.list_servers()
+
+  print(hints)
   
   if opts.role:
     # just return all the servers with a given role
