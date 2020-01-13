@@ -11,11 +11,29 @@ import json
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
   
-  
+
+def service_endpoints(services, endpoints):
+  """
+  Associate and return a list of services and the endpoints that provide access
+  to them
+  """
+
+  #
+  # For each 
+  #
+  endpoint_map = {s.id:[] for s in services}
+  for e in endpoints:
+    endpoint_map[e.Service_Name] = e
+
+
+  return endpoint_map
+    
 
 if __name__ == "__main__":
   services = ospsurvey.probes.services.list_services()
   endpoints = ospsurvey.probes.endpoints.list_endpoints()
-  
-  print(json.dumps(services))
-  print(json.dumps(endpoints))
+
+
+  se = service_endpoints(services, endpoints)
+
+  print(se)
