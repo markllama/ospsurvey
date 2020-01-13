@@ -21,12 +21,12 @@ def service_endpoints(services, endpoints):
   #
   # For each 
   #
-  endpoint_map = {s.ID:[] for s in services}
+  endpoint_map = {s.Name:[] for s in services}
 
   print(json.dumps(endpoint_map))
   
   for e in endpoints:
-    endpoint_map[e.Service_ID].append(e)
+    endpoint_map[e.Service_Name].append(e)
 
 
   return endpoint_map
