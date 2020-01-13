@@ -26,7 +26,7 @@ def service_endpoints(services, endpoints):
   print(json.dumps(endpoint_map))
   
   for e in endpoints:
-    endpoint_map[e.Service_Name].append(e)
+    endpoint_map[e.Service_ID].append(e)
 
 
   return endpoint_map
