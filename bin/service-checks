@@ -75,6 +75,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
   version = ospsurvey.version.version()
+  logging.debug("OSP version found: {}".version)
   
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
