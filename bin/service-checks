@@ -21,7 +21,7 @@ def service_endpoints(services, endpoints):
   #
   # For each 
   #
-  endpoint_map = {s.id:[] for s in services}
+  endpoint_map = {s.ID:[] for s in services}
   for e in endpoints:
     endpoint_map[e.Service_Name] = e
 
