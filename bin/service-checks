@@ -4,13 +4,13 @@ Get the list of undercloud services.
 Ensure that they are running and responding on all endpoints.
 Ensure that system services are running on all controllers
 """
+from __future__ import print_function
 
 import json
 
 import ospsurvey.probes.services
   
   
-from __future__ import print_function
 
 if __name__ == "__main__":
   services = ospsurvey.probes.services.list_services()
