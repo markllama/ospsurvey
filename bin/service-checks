@@ -6,23 +6,30 @@ Ensure that system services are running on all controllers
 """
 from __future__ import print_function
 
+import argparse
 import json
+import logging
 
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
+
+def parse_cli_arguments():
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-d", "--debug", action="store_true", default=False)
   
+  return opts
 
 def service_endpoints(services, endpoints):
   """
   Associate and return a list of services and the endpoints that provide access
-  to them
+  to them.
+  Should also note any service without an endpoint or (is this possible?)
+  endpoint without a service.
   """
-
-  #
-  # For each 
-  #
+  # create an empty array for each service
   endpoint_map = {s.Name:[] for s in services}
-
+  # and put each endpoint into one
   for e in endpoints:
     endpoint_map[e.Service_Name].append(e)
 
@@ -30,10 +37,15 @@ def service_endpoints(services, endpoints):
     
 
 if __name__ == "__main__":
+
+  opts = parse_cli_arguments()
+  if opts.debug:
+    logging.basic_config(level=logging.DEBUG)
+  
   services = ospsurvey.probes.services.list_services()
   endpoints = ospsurvey.probes.endpoints.list_endpoints()
 
-
+  # map all endpoints to a service
   se = service_endpoints(services, endpoints)
 
   print(se)
