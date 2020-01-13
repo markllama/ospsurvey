@@ -99,7 +99,7 @@ if __name__ == "__main__":
   else:
     logging.info("profile not found at {}: skipping profile load".format(profile_path))
     profile = None
-  logging.debug("profile: {}".format(json.dump(profile))
+  logging.debug("profile: {}".format(json.dump(profile)))
 
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
