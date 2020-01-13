@@ -17,16 +17,16 @@ import ospsurvey.probes.services
 def parse_cli_arguments():
 
   parser = argparse.ArgumentParser()
-  parser.add_argument("-d", "--debug", action="store_true", default=False)
+  parser.add_argument("-d", "--debug", action="store_true", default=False,
+                      help="Print additional information for status and diagnosis")
 
+  parser.add_argument("-p", "--profile-dir",
+                      help="Where to find OSP version profiles")
+  
   env_group = parser.add_mutually_exclusive_group()
   env_group.add_argument('-V', '--require-env', dest="require_env", action='store_true', default=True)
   env_group.add_argument('--no-require-env', dest="require_env", action='store_false')
   return parser.parse_args()
-
-  opts = parser.parse_args()
-  
-  return opts
 
 def service_endpoints(services, endpoints):
   """
@@ -65,7 +65,6 @@ def check_credentials():
       logging.debug("OpenStack Auth Var: {} = {}".format(var, os.environ[var]))
 
   return ok
-
 
 
 if __name__ == "__main__":
