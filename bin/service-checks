@@ -11,6 +11,7 @@ import json
 import logging
 import re
 import os
+import yaml
 
 import ospsurvey.version
 import ospsurvey.probes.endpoints
@@ -91,6 +92,9 @@ if __name__ == "__main__":
 
   profile_path = profile_filename(opts.profile_dir, version)
   logging.debug("loading profile from {}".format(profile_path))
+
+  if os.path.exists(profile_path):
+    yaml.load(open(profile_path))
   
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
