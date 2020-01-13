@@ -8,11 +8,14 @@ from __future__ import print_function
 
 import json
 
+import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
   
   
 
 if __name__ == "__main__":
   services = ospsurvey.probes.services.list_services()
-
+  endpoints = ospsurvey.probes.endpoints.list_endpoints()
+  
   print(json.dumps(services))
+  print(json.dumps(endpoints))
