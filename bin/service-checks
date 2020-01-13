@@ -36,4 +36,4 @@ if __name__ == "__main__":
 
   se = service_endpoints(services, endpoints)
 
-  print(json.dumps(se))
+  print(se)
