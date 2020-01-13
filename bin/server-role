@@ -33,7 +33,8 @@ def parse_cli():
     All output is JSON for further processing.
     """)
 
-  parser.add_argument('-d', '--debug', action='store_true', default=False,
+  parser.add_argument('-d', '--debug', action='store_true',
+                      default=False,
                       help="Print additional information for status and diagnosis")
   selector_group = parser.add_mutually_exclusive_group()
   selector_group.add_argument('-s', '--server',
@@ -43,6 +44,9 @@ def parse_cli():
   selector_group.add_argument('-R', '--list-roles', dest="list_roles",
                               action='store_true', default=False,
                               help="list the roles defined for this cluster")
+  selector_group.add_argument('-o', '--orphan-nodes', action="store_true",
+                              default=False,
+                              help='list any undeployed or untagged nodes')
 
   env_group = parser.add_mutually_exclusive_group()
   env_group.add_argument('-V', '--require-env', dest="require_env", action='store_true', default=True)
@@ -136,6 +140,10 @@ if __name__ == "__main__":
   # Get a list of all nodes because you can't easily query a single node by its
   # instance UUID
   nodes = ospsurvey.probes.nodes.list_nodes()
+
+  if opts.orphan_nodes:
+    pass
+    sys.exit(1)
 
   if opts.server:
     logging.info("Find the role of server {}".format(opts.server))
