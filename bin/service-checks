@@ -9,6 +9,7 @@ from __future__ import print_function
 import argparse
 import json
 import logging
+import re
 import os
 
 import ospsurvey.version
@@ -67,6 +68,16 @@ def check_credentials():
 
   return ok
 
+def profile_filename(profile_dir, version_string):
+  """
+  Find the file with the profile yaml data for comparison to the actual deployed
+  """
+
+  version_re = r'^(\d+)\.(\d+)\.(\d+)$'
+  version_match = re.match(version_re, version_string)
+  (major, minor, build) = version_match.groups() if version_match is not None
+
+  return os.path.join(profile_dir, "osp-{}.yaml".format(major))
 
 if __name__ == "__main__":
 
@@ -76,6 +87,9 @@ if __name__ == "__main__":
 
   version = ospsurvey.version.version()
   logging.debug("OSP version found: {}".format(version))
+
+  profile_path = profile_filename(opts.profile_dir, version)
+  logging.debug("loading profile from {}".format(profile_path))
   
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
