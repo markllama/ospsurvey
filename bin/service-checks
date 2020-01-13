@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
   opts = parse_cli_arguments()
   if opts.debug:
-    logging.basic_config(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
   
   services = ospsurvey.probes.services.list_services()
   endpoints = ospsurvey.probes.endpoints.list_endpoints()
