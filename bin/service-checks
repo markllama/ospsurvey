@@ -91,13 +91,16 @@ if __name__ == "__main__":
   logging.debug("OSP version found: {}".format(version))
 
   profile_path = profile_filename(opts.profile_dir, version)
-  logging.debug("loading profile from {}".format(profile_path))
+  logging.info("searching for profile at {}".format(profile_path))
 
   if os.path.exists(profile_path):
+    logging.info("loading profile from {}".format(profile_path))
     profile = yaml.load(open(profile_path))
   else:
+    logging.info("profile not found at {}: skipping profile load".format(profile_path))
     profile = None
-  
+  logging.debug("profile: {}".format(json.dump(profile))
+
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
     sys.exit(1)
