@@ -85,3 +85,15 @@ if __name__ == "__main__":
   se = service_endpoints(services, endpoints)
 
   logging.debug(se)
+
+  # -----------------------------------------------------------------------
+  # Checks
+  # -----------------------------------------------------------------------
+  # * all services present
+  # * note extra services
+  # * note any service not enabled
+  # * check endpoints for each service
+  # ** ping the admin interface
+  # ** query the admin interface URL
+  # ** ping and query all interfaces accessable from the director
+  # 
