@@ -94,7 +94,9 @@ if __name__ == "__main__":
   logging.debug("loading profile from {}".format(profile_path))
 
   if os.path.exists(profile_path):
-    yaml.load(open(profile_path))
+    profile = yaml.load(open(profile_path))
+  else:
+    profile = None
   
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
