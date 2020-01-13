@@ -11,6 +11,7 @@ import json
 import logging
 import os
 
+import ospsurvey.version
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
 
@@ -72,6 +73,8 @@ if __name__ == "__main__":
   opts = parse_cli_arguments()
   if opts.debug:
     logging.basicConfig(level=logging.DEBUG)
+
+  version = ospsurvey.version.version()
   
   if opts.require_env and check_credentials() is False:
     logging.fatal("Missing required environment variables: aborting survey")
