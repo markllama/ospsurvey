@@ -50,4 +50,4 @@ if __name__ == "__main__":
   # map all endpoints to a service
   se = service_endpoints(services, endpoints)
 
-  print(se)
+  logging.debug(se)
