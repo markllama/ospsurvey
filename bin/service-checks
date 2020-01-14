@@ -96,6 +96,12 @@ def ping(hostname):
   response = os.system("ping -c 1 {} 2>&1 >/dev/null".format(hostname))
   return response == 0
 
+def probe_url(url_string):
+  """
+  Query a URL string for any valid response
+  """
+  pass
+  
 if __name__ == "__main__":
 
   opts = parse_cli_arguments()
@@ -175,11 +181,19 @@ if __name__ == "__main__":
     url = urlparse(url_string)
     #admin_endpoint = endpoint_map[s.Name]
 
+    # Check that the admin endpoint URLs are pingable from director
     if not ping(url.hostname):
       logging.error("service {}: admin IP {} not responding".format(
         s.Name, url.hostname))
     else:
       logging.debug("service {} admin endpoint responding on IP {}".format(
         s.Name, url.hostname))
+
+
+    # Check that admin endpoints respond to simple query from director
+    if not probe_url(url.geturl()):
+      logging.error("service {}: admin URL not responding: {}".format(
+        s.Name, url.geturl())
+    
 
     
