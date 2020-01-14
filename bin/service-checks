@@ -155,5 +155,5 @@ if __name__ == "__main__":
   # check the admin endpoint.  You know that should be accessable from
   # the director
   for s in services:
-    logging.debug("service {} - admin URL: {}".format(s))
+    logging.debug("service {} - admin URL: {}".format(s.Name, "URL"))
     #admin_endpoint = endpoint_map[s.Name]
