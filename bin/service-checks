@@ -171,7 +171,7 @@ if __name__ == "__main__":
     admin_endpoints = [e for e in endpoint_map[s.Name] if e.Interface == 'admin']
 
     url_string = admin_endpoints[0].URL if len(admin_endpoints) == 1 else "None"
-    logging.debug("service {} - admin URL: {}".format(s.Name, urlstring))
+    logging.debug("service {} - admin URL: {}".format(s.Name, url_string))
     url = urlparse(url_string)
     #admin_endpoint = endpoint_map[s.Name]
 
