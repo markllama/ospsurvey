@@ -150,4 +150,4 @@ if __name__ == "__main__":
 
     # check that all services are up
     disabled_services = [s.Name for s in services if not s.Enabled]
-    print("Disabled Services: {}".format disabled_services)
+    print("Disabled Services: {}".format(disabled_services))
