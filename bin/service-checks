@@ -13,6 +13,12 @@ import re
 import os
 import yaml
 
+# Use Python3 module if available
+try:
+  from urllib.parse import urlparse
+except ImportError:
+  from urlparse import urlparse
+
 import ospsurvey.version
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
@@ -157,6 +163,7 @@ if __name__ == "__main__":
   for s in services:
     admin_endpoints = [e for e in endpoint_map[s.Name] if e.Interface == 'admin']
 
-    url = admin_endpoints[0].URL if len(admin_endpoints) == 1 else "None"     
-    logging.debug("service {} - admin URL: {}".format(s.Name, url))
+    url_string = admin_endpoints[0].URL if len(admin_endpoints) == 1 else "None"
+    url = urlparse(url_string)
+    logging.debug("service {} - admin URL: {}".format(s.Name, url.hostname))
     #admin_endpoint = endpoint_map[s.Name]
