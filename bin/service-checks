@@ -108,8 +108,8 @@ def probe_url(url_string):
   Query a URL string for any valid response
   """
   query_string = "curl --insecure --location {}".format(url_string)
-  response = subprocess.check_output()
-  pass
+  response = subprocess.check_output(query_string.split())
+  return true
   
 if __name__ == "__main__":
 
