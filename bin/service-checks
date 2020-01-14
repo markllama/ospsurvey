@@ -200,6 +200,7 @@ if __name__ == "__main__":
 
 
     # Check that admin endpoints respond to simple query from director
-    if not probe_url(url.geturl()):
+    # can't check websockets with http probe
+    if url.scheme != "ws" and not probe_url(url.geturl()):
       logging.error("service {}: admin URL not responding: {}".format(
         s.Name, url.geturl()))
