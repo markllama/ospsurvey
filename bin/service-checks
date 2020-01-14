@@ -20,13 +20,8 @@ try:
 except ImportError:
   from urlparse import urlparse
 
-# urllib2 in python2 is moved to urllib.request and urllib.error
-try:
-  import urllib.request as urllib
-  import urllib.error
-except ImportError:
-  import urllib2 as urllib
-
+import requests
+  
 import ospsurvey.version
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
@@ -107,10 +102,15 @@ def probe_url(url_string):
   """
   Query a URL string for any valid response
   """
-  query_string = "curl --insecure --location {}".format(url_string)
-  response = subprocess.check_output(query_string.split())
-  return true
+
+  # a simple urllib2.urlopen won't work for this as we expect some non-200
+  # responses that are still OK
+  response = request.get(urlstring)
+  logging.debug("url response: {} for {}".format(
+    response.status_code, url_string))
   
+  return True
+
 if __name__ == "__main__":
 
   opts = parse_cli_arguments()
