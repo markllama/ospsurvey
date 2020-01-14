@@ -110,11 +110,10 @@ def probe_url(url_string):
     response = requests.get(url_string)
     logging.debug("url response: {} for {}".format(
       response.status_code, url_string))
-    return True
   except requests.exceptions.ConnectionError as e:
+    logging.error(e.message)
     return False
-    
-  
+
   return True
 
 if __name__ == "__main__":
