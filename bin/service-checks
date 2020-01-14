@@ -132,8 +132,16 @@ if __name__ == "__main__":
   # compare list of services from profile to actual:
   #   missing
   #   extra
-  service_count_expected =  len(profile['profile']['undercloud']['services'])
-  service_count_actual = len(services)
+  service_names = set([s.Name for s in services.keys()])
+  expected_service_names = set(profile['profile']['undercloud']['services'])
+
+  service_count_expected =  len(expected_service_names)
+  service_count_actual = len(service_names)
   print("service count - actual: {}, expected: {}".format(service_count_actual,
                                                           service_count_expected))
+
+  missing_services = expected_service_names.difference(service_names)
+  extra_services = service_names.difference(expected_service_names)
+
+  print("Extra Services: {}\nMissing Services: {}".format(extra_services, missing_services))
   
