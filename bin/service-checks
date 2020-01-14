@@ -178,5 +178,8 @@ if __name__ == "__main__":
     if not ping(url.hostname):
       logging.error("service {}: admin IP {} not responding".format(
         s.Name, url.hostname))
+    else:
+      logging.debug("service {} admin endpoint responding on IP {}".format(
+        s.Name, url.hostname))
 
     
