@@ -114,7 +114,7 @@ if __name__ == "__main__":
   # map all endpoints to a service
   endpoint_map = service_endpoints(services, endpoints)
 
-  logging.debug(se)
+  logging.debug(endpoint_map)
 
   # -----------------------------------------------------------------------
   # Checks
