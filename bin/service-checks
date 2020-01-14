@@ -23,6 +23,8 @@ def parse_cli_arguments():
   parser.add_argument("-d", "--debug", action="store_true", default=False,
                       help="Print additional information for status and diagnosis")
 
+  parser.add_argument("-P", "--no-profile", dest="load_profile", action="store_false", default=True,
+                      help="disable loading a profile for comparison")
   parser.add_argument("-p", "--profile-dir", default=os.path.abspath(os.curdir),
                       help="Where to find OSP version profiles")
   
@@ -93,6 +95,7 @@ if __name__ == "__main__":
   profile_path = profile_filename(opts.profile_dir, version)
   logging.info("searching for profile at {}".format(profile_path))
 
+  
   if os.path.exists(profile_path):
     logging.info("loading profile from {}".format(profile_path))
     profile = yaml.load(open(profile_path))
@@ -123,4 +126,14 @@ if __name__ == "__main__":
   # ** ping the admin interface
   # ** query the admin interface URL
   # ** ping and query all interfaces accessable from the director
-  # 
+
+  # compare number of services from profile to actual
+
+  # compare list of services from profile to actual:
+  #   missing
+  #   extra
+  service_count_expected =  len(profile['profile']['undercloud']['services'])
+  service_count_actual = len(services)
+  print("service count - actual: {}, expected: {}".format(service_count_actual,
+                                                          service_count_expected))
+  
