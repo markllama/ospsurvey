@@ -105,7 +105,7 @@ def probe_url(url_string):
 
   # a simple urllib2.urlopen won't work for this as we expect some non-200
   # responses that are still OK
-  response = request.get(urlstring)
+  response = requests.get(urlstring)
   logging.debug("url response: {} for {}".format(
     response.status_code, url_string))
   
