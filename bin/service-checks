@@ -111,7 +111,7 @@ def probe_url(url_string):
     logging.debug("url response: {} for {}".format(
       response.status_code, url_string))
     return True
-  except requests.exceptions.ConnectionError e:
+  except requests.exceptions.ConnectionError as e:
     return False
     
   
