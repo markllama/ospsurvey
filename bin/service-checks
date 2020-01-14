@@ -20,6 +20,13 @@ try:
 except ImportError:
   from urlparse import urlparse
 
+# urllib2 in python2 is moved to urllib.request and urllib.error
+try:
+  import urllib.request as urllib
+  import urllib.error
+except ModuleNotFoundError:
+  import urllib2 as urllib
+
 import ospsurvey.version
 import ospsurvey.probes.endpoints
 import ospsurvey.probes.services
@@ -100,6 +107,8 @@ def probe_url(url_string):
   """
   Query a URL string for any valid response
   """
+  query_string = "curl --insecure --location {}".format(url_string)
+  response = subprocess.check_output()
   pass
   
 if __name__ == "__main__":
@@ -194,6 +203,3 @@ if __name__ == "__main__":
     if not probe_url(url.geturl()):
       logging.error("service {}: admin URL not responding: {}".format(
         s.Name, url.geturl())
-    
-
-    
