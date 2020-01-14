@@ -11,6 +11,7 @@ import json
 import logging
 import re
 import os
+import subprocess
 import yaml
 
 # Use Python3 module if available
@@ -88,6 +89,12 @@ def profile_filename(profile_dir, version_string):
 
   return os.path.join(profile_dir, "profiles/osp-{}.yaml".format(major)) if major else None
 
+def ping(hostname):
+  """
+  Return true if a host can be reached with ICMP Echo request"
+  """
+  response = os.system("ping -c 1 {} 2>&1 >/dev/null".format(hostname))
+  return response == 0
 
 if __name__ == "__main__":
 
@@ -164,6 +171,12 @@ if __name__ == "__main__":
     admin_endpoints = [e for e in endpoint_map[s.Name] if e.Interface == 'admin']
 
     url_string = admin_endpoints[0].URL if len(admin_endpoints) == 1 else "None"
+    logging.debug("service {} - admin URL: {}".format(s.Name, urlstring))
     url = urlparse(url_string)
-    logging.debug("service {} - admin URL: {}".format(s.Name, url.hostname))
     #admin_endpoint = endpoint_map[s.Name]
+
+    if not ping(url.hostname):
+      logging.error("service {}: admin IP {} not responding".format(
+        s.Name, url.hostname))
+
+    
