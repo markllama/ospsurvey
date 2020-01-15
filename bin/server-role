@@ -196,7 +196,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # find the node for this server
-    server_nodes = [n for in in nodes if n.Instance_UUID == server.ID]
+    server_nodes = [n for n in nodes if n.Instance_UUID == server.ID]
     logging.debug("found {} matching node for server {}".format(
       len(server_nodes), opts.server))
       
