@@ -199,11 +199,11 @@ if __name__ == "__main__":
     server_nodes = [n for n in nodes if n.Instance_UUID == server.ID]
     logging.debug("found {} matching node for server {}".format(
       len(server_nodes), opts.server))
-      
-    # find the role of this node
 
-    
-    
+    node = server_nodes[0]
+    role = node_role(node, node_pattern)
+    print(role)
+      
     sys.exit(0)
   
   if opts.role:
