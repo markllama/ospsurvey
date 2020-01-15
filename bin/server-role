@@ -202,7 +202,7 @@ if __name__ == "__main__":
 
     node = server_nodes[0]
     role = node_role(node, node_pattern)
-    print(role)
+    print(json.dumps(role))
       
     sys.exit(0)
   
