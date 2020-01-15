@@ -147,26 +147,26 @@ if __name__ == "__main__":
     pass
     sys.exit(1)
 
-  if opts.server:
-    logging.info("Find the role of server {}".format(opts.server))
-    server = ospsurvey.probes.servers.get_server(opts.server)
-    logging.debug(server)
+  # if opts.server:
+  #   logging.info("Find the role of server {}".format(opts.server))
+  #   server = ospsurvey.probes.servers.get_server(opts.server)
+  #   logging.debug(server)
 
-    # with the server we now have the server id.
-    # now we need to find the node that corresponds
-    one_node = [n for n in nodes if server.id == n.Instance_UUID]
-    if len(one_node) == 0:
-      logging.fatal("no node matching server {}".format(server.name))
+  #   # with the server we now have the server id.
+  #   # now we need to find the node that corresponds
+  #   one_node = [n for n in nodes if server.id == n.Instance_UUID]
+  #   if len(one_node) == 0:
+  #     logging.fatal("no node matching server {}".format(server.name))
 
-    if len(one_node) > 1:
-      logging.fatal("ambiguous match: {} nodes matching server {}".format(len(one_node), server.name))
+  #   if len(one_node) > 1:
+  #     logging.fatal("ambiguous match: {} nodes matching server {}".format(len(one_node), server.name))
       
-    # and then the role of that node
-    node = one_node[0]
-    logging.debug("found node {} matching server {}".format(node.Name, server.name))
-    role = node_role(node, node_patterns)
-    print(role)
-    sys.exit(0)
+  #   # and then the role of that node
+  #   node = one_node[0]
+  #   logging.debug("found node {} matching server {}".format(node.Name, server.name))
+  #   role = node_role(node, node_patterns)
+  #   print(role)
+  #   sys.exit(0)
 
   #
   # We have the list of nodes. We could filter those for the requested role
@@ -182,6 +182,25 @@ if __name__ == "__main__":
   for node in nodes:
     roles[node_roles[node.Name]].append(servers_by_id[node.Instance_UUID].Name)
 
+  if opts.server:
+    logging.info("Find the role of server {}".format(opts.server))
+    
+    # check if they gave ID
+    if opts.server in servers_by_id:
+      server = servers_by_id[opts.server]
+    else:
+      servers_by_name = {s.Name:s for s in servers}
+      if opts.server in servers_by_name:
+        server = servers_by_name[opts.server]
+      else:
+        sys.exit(1)
+
+    
+
+    
+    
+    sys.exit(0)
+  
   if opts.role:
     # just return all the servers with a given role
     logging.info("Find the servers with role {}".format(opts.role))
