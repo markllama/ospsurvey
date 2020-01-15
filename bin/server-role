@@ -76,7 +76,7 @@ def check_credentials():
 
   return ok
 
-def node_role(node, hints):
+def node_role(node, node_patterns):
   """
   Given a node and the hints map, return the role for a node
   NOTE: this is very inefficient as it compiles the re's every pass
@@ -84,10 +84,10 @@ def node_role(node, hints):
 
   tag = node.Properties['capabilities']['node']
   
-  for p in hints:
+  for p in node_patterns:
     #print("checking hint {} on node {}".format(p, node.Name))
     if re.match(p, tag):
-      return hints[p]
+      return node_patterns[p]
 
   return None
 
@@ -141,6 +141,8 @@ if __name__ == "__main__":
   # instance UUID
   nodes = ospsurvey.probes.nodes.list_nodes()
 
+  # TBD
+  # List nodes that are not tagged or deployed yet
   if opts.orphan_nodes:
     pass
     sys.exit(1)
