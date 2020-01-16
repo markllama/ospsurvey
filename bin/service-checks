@@ -196,17 +196,19 @@ if __name__ == "__main__":
 
     # Check that the admin endpoint URLs are pingable from director
     if not ping(url.hostname):
-      logging.error("service {}: admin IP {} not responding".format(
-        s.Name, url.hostname))
+      #logging.error("service {}: admin IP {} not responding".format(
+      #  s.Name, url.hostname))
+      service_report['endpoints'][s.Name]['ping'] = "fail"
     else:
       logging.debug("service {} admin endpoint responding on IP {}".format(
         s.Name, url.hostname))
-
+      service_report['endpoints'][s.Name]['query'] = "fail"
 
     # Check that admin endpoints respond to simple query from director
     # can't check websockets with http probe
     if url.scheme != "ws" and not probe_url(url.geturl()):
-      logging.error("service {}: admin URL not responding: {}".format(
-        s.Name, url.geturl()))
-
+      #logging.error("service {}: admin URL not responding: {}".format(
+      #  s.Name, url.geturl()))
+      
+      
   print(json.dumps(service_report))
