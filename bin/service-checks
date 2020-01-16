@@ -202,12 +202,12 @@ if __name__ == "__main__":
     else:
       logging.debug("service {} admin endpoint responding on IP {}".format(
         s.Name, url.hostname))
-      service_report['endpoints'][s.Name]['query'] = "fail"
 
     # Check that admin endpoints respond to simple query from director
     # can't check websockets with http probe
     if url.scheme != "ws" and not probe_url(url.geturl()):
       #logging.error("service {}: admin URL not responding: {}".format(
       #  s.Name, url.geturl()))
+      service_report['endpoints'][s.Name]['query'] = "fail"
 
   print(json.dumps(service_report))
