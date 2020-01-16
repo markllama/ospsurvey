@@ -184,6 +184,8 @@ if __name__ == "__main__":
 
   # check the admin endpoint.  You know that should be accessable from
   # the director
+  service_report['endpoints'] = {}
+  
   for s in services:
     admin_endpoints = [e for e in endpoint_map[s.Name] if e.Interface == 'admin']
 
