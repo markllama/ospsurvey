@@ -206,3 +206,5 @@ if __name__ == "__main__":
     if url.scheme != "ws" and not probe_url(url.geturl()):
       logging.error("service {}: admin URL not responding: {}".format(
         s.Name, url.geturl()))
+
+  print(json.dumps(service_report))
