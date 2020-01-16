@@ -168,7 +168,7 @@ if __name__ == "__main__":
   service_report = {}
 
   if profile:
-    service_names = set([s.Name for s in services])
+    service_names = set([s.Name for s in services]))
     expected_service_names = set(profile['profile']['undercloud']['services'])
 
     service_report['count'] = {
@@ -176,8 +176,8 @@ if __name__ == "__main__":
       'expected': len(expected_service_names)
     }
 
-    service_report['missing'] = expected_service_names.difference(service_names)
-    service_report['extra'] = service_names.difference(expected_service_names)
+    service_report['missing'] = list(expected_service_names.difference(service_names))
+    service_report['extra'] = list(service_names.difference(expected_service_names))
 
   # check that all services are up
   service_report['disabled'] = [s.Name for s in services if not s.Enabled]
