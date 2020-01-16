@@ -198,7 +198,7 @@ if __name__ == "__main__":
     if not ping(url.hostname):
       #logging.error("service {}: admin IP {} not responding".format(
       #  s.Name, url.hostname))
-      service_report['endpoints'][s.Name] = {'ping': "fail"}
+      service_report['endpoints'][s.Name] = {'admin': {'ping': "fail"}}
     else:
       logging.debug("service {} admin endpoint responding on IP {}".format(
         s.Name, url.hostname))
@@ -208,6 +208,6 @@ if __name__ == "__main__":
     if url.scheme != "ws" and not probe_url(url.geturl()):
       #logging.error("service {}: admin URL not responding: {}".format(
       #  s.Name, url.geturl()))
-      service_report['endpoints'][s.Name] = {'query': "fail"}
+      service_report['endpoints'][s.Name] = {'admin': {'query': "fail"}}
 
   print(json.dumps(service_report))
