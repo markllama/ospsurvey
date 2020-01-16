@@ -172,7 +172,7 @@ if __name__ == "__main__":
     expected_service_names = set(profile['profile']['undercloud']['services'])
 
     service_report['count'] = {
-      'actual': len(service_names)
+      'actual': len(service_names),
       'expected': len(expected_service_names)
     }
 
