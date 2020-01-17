@@ -187,14 +187,19 @@ def get_sm_repos():
     
 if __name__ == "__main__":
  
-  #sm_config = get_sm_config()
-  #print(json.dumps(sm_config))
+  sm_config = get_sm_config()
 
-  #sm_status = get_sm_status()
-  #print(json.dumps(sm_status))
+  sm_status = get_sm_status()
   
-  #sm_consumed = get_sm_consumed()
-  #print(json.dumps(sm_consumed))
+  sm_consumed = get_sm_consumed()
 
   sm_repos = get_sm_repos()
-  print(json.dumps(sm_repos))
+
+  print(json.dumps({
+    'status': sm_status,
+    'config': sm_config,
+    'subscriptions': sm_consumed,
+    'repos': sm_repos
+  }))
+
+  #print(json.dumps(sm_repos))
