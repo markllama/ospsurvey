@@ -8,7 +8,7 @@ Query and compile subscription manager information:
   enabled repos
 """
 
-import configparser
+import ConfigParser
 import json
 import re
 import subprocess  
@@ -27,7 +27,7 @@ def sm_output_parse(sm_output):
   #
   marker_re = re.compile(r'^\+-+\+$')
 
-class SmConfigParser(configparser.ConfigParser):
+class SmConfigParser(ConfigParser.ConfigParser):
 
   def as_dict(self):
     d = dict(self._sections)
@@ -187,14 +187,14 @@ def get_sm_repos():
     
 if __name__ == "__main__":
  
-  sm_config = get_sm_config()
+  #sm_config = get_sm_config()
   sm_status = get_sm_status()
   sm_consumed = get_sm_consumed()
   sm_repos = get_sm_repos()
 
   print(json.dumps({
     'status': sm_status,
-    'config': sm_config,
+    #'config': sm_config,
     'subscriptions': sm_consumed,
     'repos': sm_repos
   }))
