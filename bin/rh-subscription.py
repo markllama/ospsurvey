@@ -80,21 +80,121 @@ def get_sm_status():
   # report the results as a structure.
   return {'status': status, 'purpose': purpose}
 
+def parse_sm_record(lines):
+  """
+  Create a dict record from a fragement of a subscription-manager output
+  """
+  # lines are key/value, with multiple values signalled by white space at the
+  # beginning of the line.
+  # blank lines signal the end of a structure
+  kv_re = re.compile('^(([^:]+):)?\s+(.*)$')
+
+  record = {}
+  # The subscription name will be the key for each subscription record
+  title = re.sub('^.*:\s+', '', lines[0]).strip()
+
+  for l in lines[1:]:
+    # check all lines for "((key):)? (value)"
+    #new_value = kv_re.match('^(([^:]+):)?\s+(.*)$', l)
+    new_value = kv_re.match(l)
+    if new_value:
+      a,k,v = new_value.groups()
+      
+      # If a key is present, this is a new field of the record
+      if k:
+        record[k] = v
+        hold_k = k
+
+      # If not, the field is a list of values.  Append to it
+      else:
+        if type(record[hold_k]) is list:
+          record[hold_k].append(v)
+        else:
+          record[hold_k] = [record[hold_k], v]
+
+  return title, record
+
+
 def get_sm_consumed():
   """
+  Report the consumed subscriptions
   """
   # get the actual status
   sm_consumed_string = \
     subprocess.check_output("sudo subscription-manager list --consumed".split())
 
-  
+  # read the header and get the title
 
+  sm_consumed_lines = sm_consumed_string.split('\n')
+
+  # 1st and 3rd lines should match "^\+-*\*$"
+  # Second line is title, with white space stripped
+
+  # lines are key/value, with multiple values signalled by white space at the
+  # beginning of the line.
+  # blank lines signal the end of a structure
+  kv_re = re.compile("^([^:]+):\s+(.*)$")
+
+  # Initialize the consumed subscriptions set
+  subscriptions = {}
+
+  # The first line of each subscription record will have this string
+  marker = "Subscription Name"
+  # Get the index of each line with the marker in it
+  # Those are the beginning lines of subscription records
+  starts = [i for i, line in enumerate(sm_consumed_lines) if line.startswith(marker + ':')]
+
+  # Collect all of the subscription records
+  for start in starts:
+
+    # Clip out just the lines for this record from the output
+    end = sm_consumed_lines[start:].index("")
+    sub_lines = sm_consumed_lines[start:start + end]
+
+    title, record = parse_sm_record(sub_lines)
+    subscriptions[title] = record
+
+  return subscriptions
+
+
+def get_sm_repos():
+  """
+  Get a list of repositories enabled in subscription manager
+  """
+  sm_repos_string = \
+    subprocess.check_output("sudo subscription-manager repos --list-enabled".split())
+
+  sm_repos_lines = sm_repos_string.split('\n')
+
+  repos = {}
+
+  # The first line of each subscription record will have this string
+  marker = "Repo ID"
+  # Get the index of each line with the marker in it
+  # Those are the beginning lines of subscription records
+  starts = [i for i, line in enumerate(sm_repos_lines) if line.startswith(marker + ':')]
+
+  # Collect all of the subscription records
+  for start in starts:
+    # Clip out just the lines for this record from the output
+    end = sm_repos_lines[start:].index("")
+    repo_lines = sm_repos_lines[start:start + end]
+
+    title, record = parse_sm_record(repo_lines)
+    repos[title] = record
+
+  return repos
+    
 if __name__ == "__main__":
-
+ 
   #sm_config = get_sm_config()
   #print(json.dumps(sm_config))
 
-  sm_status = get_sm_status()
-  print(json.dumps(sm_status))
+  #sm_status = get_sm_status()
+  #print(json.dumps(sm_status))
   
-  sm_consumed = get_sm_consumed()
+  #sm_consumed = get_sm_consumed()
+  #print(json.dumps(sm_consumed))
+
+  sm_repos = get_sm_repos()
+  print(json.dumps(sm_repos))
