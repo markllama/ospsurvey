@@ -36,8 +36,10 @@ class SmConfigParser(configparser.ConfigParser):
       d[k].pop('__name__', None)
     return d
 
-if __name__ == "__main__":
-
+def get_sm_config():
+  """
+  Read the subscription-manager configuration and return it as a dict
+  """
   sm_config_string_orig = subprocess.check_output("sudo subscription-manager config".split())
 
   # remove lines afer the one containing "default value in use"
@@ -52,6 +54,31 @@ if __name__ == "__main__":
   sm_config = SmConfigParser()
   sm_config.read_string(unicode(sm_config_string_unbracket))
 
-  print(json.dumps(sm_config.as_dict()))
+  return sm_config.as_dict()
+
+def get_sm_status():
+  """
+  Gather subscription manager and yum status
+  """
+
+  sm_status_string = \
+    subprocess.check_output("sudo subscription-manager status".split())
+
+  status_re = re.compile("Overall Status: (.*)")
+  purpose_re = re.compile("System Purpose Status: (.*)")
+  status_match = status_re.search(sm_status_string, re.MULTILINE)
+  status = status_match.groups()[0]
+  purpose_match = purpose_re.search(sm_status_string, re.MULTILINE)
+  purpose = purpose_match.groups()[0]
+
+  return {'status': status, 'purpose': purpose}
+
+
+if __name__ == "__main__":
+
+  #sm_config = get_sm_config()
+  #print(json.dumps(sm_config))
+
+  sm_status = get_sm_status()
+  print(json.dumps(sm_status))
   
-  #sm_config.read('/etc/rhsm/rhsm.conf')
