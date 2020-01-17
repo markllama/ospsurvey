@@ -80,7 +80,14 @@ def get_sm_status():
   # report the results as a structure.
   return {'status': status, 'purpose': purpose}
 
+def get_sm_consumed():
+  """
+  """
+  # get the actual status
+  sm_consumed_string = \
+    subprocess.check_output("sudo subscription-manager list --consumed".split())
 
+  
 
 if __name__ == "__main__":
 
@@ -90,3 +97,4 @@ if __name__ == "__main__":
   sm_status = get_sm_status()
   print(json.dumps(sm_status))
   
+  sm_consumed = get_sm_consumed()
