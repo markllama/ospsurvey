@@ -61,17 +61,25 @@ def get_sm_status():
   Gather subscription manager and yum status
   """
 
+  # define the value search patterns
+  status_re = re.compile("Overall Status: (.*)")
+  purpose_re = re.compile("System Purpose Status: (.*)")
+
+  # get the actual status
   sm_status_string = \
     subprocess.check_output("sudo subscription-manager status".split())
 
-  status_re = re.compile("Overall Status: (.*)")
-  purpose_re = re.compile("System Purpose Status: (.*)")
+  # extract the status string
   status_match = status_re.search(sm_status_string, re.MULTILINE)
   status = status_match.groups()[0]
+
+  # extract the purpose string
   purpose_match = purpose_re.search(sm_status_string, re.MULTILINE)
   purpose = purpose_match.groups()[0]
 
+  # report the results as a structure.
   return {'status': status, 'purpose': purpose}
+
 
 
 if __name__ == "__main__":
