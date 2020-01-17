@@ -188,11 +188,8 @@ def get_sm_repos():
 if __name__ == "__main__":
  
   sm_config = get_sm_config()
-
   sm_status = get_sm_status()
-  
   sm_consumed = get_sm_consumed()
-
   sm_repos = get_sm_repos()
 
   print(json.dumps({
@@ -201,5 +198,3 @@ if __name__ == "__main__":
     'subscriptions': sm_consumed,
     'repos': sm_repos
   }))
-
-  #print(json.dumps(sm_repos))
