@@ -20,11 +20,13 @@ import sys
 # There are a couple of versions of ConfigParser. The older ones want to read
 # only from a file.  So this snippet adapts for both possibilities
 #
-try:
-  import configparser
-except ImportError as e:
-  print("failed to import configparser")
-  sys.exit(1)
+#try:
+#  import configparser
+#except ImportError as e:
+#  print("failed to import configparser")
+#  sys.exit(1)
+
+import ConfigParser as configparser
 
 # Extend the ConfigParser to create a dict
 # from https://stackoverflow.com/questions/3220670/read-all-the-contents-in-ini-file-into-dictionary-with-python
