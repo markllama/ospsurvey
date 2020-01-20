@@ -16,6 +16,7 @@ try:
   import configparser
 except ImportError as e:
   # disable config stuff
+  import ConfigParser as configparser
   
 import json
 import re
