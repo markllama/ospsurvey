@@ -6,9 +6,17 @@ Query and compile subscription manager information:
   configuration
   consumed subscriptions
   enabled repos
+
+TODO:
+  If status returns non-zero, check for rhn config:
+  /etc/sysconfig/rhn/*
 """
 
-import ConfigParser
+try:
+  import configparser
+except ImportError as e:
+  # disable config stuff
+  
 import json
 import re
 import subprocess  
@@ -16,18 +24,7 @@ import subprocess
 # Extend the ConfigParser to create a dict
 # from https://stackoverflow.com/questions/3220670/read-all-the-contents-in-ini-file-into-dictionary-with-python
 
-def sm_output_parse(sm_output):
-  """
-  Title
-  Key: Value [...Values]
-  """
-
-  #
-  # The header begins and ends with a marker line matching: ^+-+
-  #
-  marker_re = re.compile(r'^\+-+\+$')
-
-class SmConfigParser(ConfigParser.ConfigParser):
+class SmConfigParser(configparser.ConfigParser):
 
   def as_dict(self):
     d = dict(self._sections)
@@ -66,9 +63,12 @@ def get_sm_status():
   purpose_re = re.compile("System Purpose Status: (.*)")
 
   # get the actual status
-  sm_status_string = \
-    subprocess.check_output("sudo subscription-manager status".split())
-
+  try:
+    sm_status_string = \
+      subprocess.check_output("sudo subscription-manager status".split())
+  except subprocess.CalledProcessError as e:
+    return {'status': 'Unsubscribed'}
+  
   # extract the status string
   status_match = status_re.search(sm_status_string, re.MULTILINE)
   status = status_match.groups()[0]
@@ -186,15 +186,17 @@ def get_sm_repos():
   return repos
     
 if __name__ == "__main__":
- 
+
+  record = {}
   #sm_config = get_sm_config()
   sm_status = get_sm_status()
-  sm_consumed = get_sm_consumed()
-  sm_repos = get_sm_repos()
+  record['status'] = sm_status
+  
+  if sm_status['status'] != 'Unsubscribed':
+    sm_consumed = get_sm_consumed()
+    sm_repos = get_sm_repos()
 
-  print(json.dumps({
-    'status': sm_status,
-    #'config': sm_config,
-    'subscriptions': sm_consumed,
-    'repos': sm_repos
-  }))
+    record['consumed'] = sm_consumed
+    record['repos'] = sm_repos
+    
+  print(json.dumps(record))
