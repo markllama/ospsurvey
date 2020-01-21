@@ -31,20 +31,6 @@ import ConfigParser as configparser
 
 # Extend the ConfigParser to create a dict
 # from https://stackoverflow.com/questions/3220670/read-all-the-contents-in-ini-file-into-dictionary-with-python
-
-class FileSimulator:
-  def __init__(self, input):
-    self.lines = str(input).split("\n")
-    self.cursor = 0
-    
-  def readline(self):
-    if self.cursor >= len(self.lines):
-      return None
-    
-    line = self.lines[self.cursor]
-    self.cursor += 1
-    return line
-
 class SmConfigParser(configparser.ConfigParser):
 
   def as_dict(self):
@@ -53,9 +39,6 @@ class SmConfigParser(configparser.ConfigParser):
       d[k] = dict(self._defaults, **d[k])
       d[k].pop('__name__', None)
     return d
-
-  def read_string(self, config_string):
-    self.readfp(FileSimulator(config_string))
 
     
 def get_sm_config():
@@ -70,13 +53,15 @@ def get_sm_config():
   config_lines = config_string.split('\n')
   # remove the default line and everything after
   config_lines = config_lines[:config_lines.index(default_line)]
-  # remove leading white space
+  # remove leading white space because ConfigParser doesn't like it.
   config_lines = [line.lstrip() for line in config_lines]
 
   config_string = "\n".join(config_lines)
   config_string = re.sub(r'= \[\]', '= default', config_string)
   config_string = re.sub(r'= \[([^]]+)\]', r'= \1', config_string)
-  
+
+  # Write and then read an anonymous temp file because ConfigParser can't
+  # read strings
   tf = tempfile.TemporaryFile(mode='w+')
   tf.write(unicode(config_string))
   tf.seek(0)
@@ -218,7 +203,37 @@ def get_sm_repos():
     repos[title] = record
 
   return repos
-    
+
+def rhn_check():
+  """
+  Check if the host is registered with RHN Classic or Sat5
+  """
+  # This needs renaming to show intent
+  
+  try:
+    subprocess.check_call("/usr/sbin/rhn_check")
+  except:
+    # CalledSubprocessError returns non-0
+    # OSError - no such file
+    return False
+
+  return True
+
+def rhn_config():
+  """
+  Read and return the RHN/Sat5 subscription configuration
+  """
+  config_file = open('/etc/sysconfig/rhn/up2date')
+  lines = config_file.readlines()
+  config_file.close()
+  
+  varlist = [l.strip('\n').split('=') for l in lines if '=' in l and not re.match('.*\[comment\].*', l)]
+  
+  config = {v[0]:v[1] for v in varlist}
+  
+  return config
+
+
 if __name__ == "__main__":
 
   record = {}
