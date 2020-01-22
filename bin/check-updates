@@ -11,7 +11,7 @@ import subprocess
 
 def check_updates():
   """
-  Query the security updates available with yum
+  Query the package updates available with yum
   Header: Loaded plugins...
   Columns: Advisory ID, reason/level, package name
   Footer: updateinfo list done
@@ -34,13 +34,43 @@ def check_updates():
     if not package in packages:
       packages[package]=list()
       
-    packages[package].append({'advisory': advisory, 'reason': reason})
+    packages[package].append({'advisory': advisory, 'level': re.sub('/Sec.$', '', reason)})
 
   return packages
 
+def check_cves():
+  """
+  Query the vulnerability updates available with yum
+  Header: Loaded plugins...
+  Columns: Advisory ID, reason/level, package name
+  Footer: updateinfo list done
+  """
+  update_string = subprocess.check_output('sudo yum updateinfo list cves'.split())
+  update_lines = update_string.split('\n')
+  # The header and footer are the first and last lines
+
+  packages = {}
+  for line in update_lines:
+    # skip non-record lines
+    if len(line) == 0 \
+       or line.startswith('Loaded') \
+       or line.startswith('updateinfo'):
+      continue
+
+    # Split into data components - CVES start with white space
+    (advisory, reason, package) = re.split('\s+', line.strip())
+    
+    if not package in packages:
+      packages[package]=list()
+      
+    packages[package].append({'advisory': advisory, 'level': re.sub('/Sec.$', '', reason)})
+
+  return packages
+  
 if __name__ == "__main__":
 
   logging.basicConfig(loglevel=logging.DEBUG)
   updates = check_updates()
-
-  print(json.dumps(updates))
+  cves = check_cves()
+  
+  print(json.dumps({'updates': updates, 'cves': cves}))
