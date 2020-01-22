@@ -242,11 +242,11 @@ def rhn_check():
 
   return True
 
-def rhn_config():
+def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
   """
   Read and return the RHN/Sat5 subscription configuration
   """
-  config_file = open('/etc/sysconfig/rhn/up2date')
+  config_file = open(up2date_file)
   lines = config_file.readlines()
   config_file.close()
   
@@ -277,7 +277,8 @@ if __name__ == "__main__":
           
   elif rhn_check():
     record = {'subscription-method': 'rhn'}
-    rhn_config = get_rhn_config()
+    rhn_config = get_rhn_config(up2date_file)
+    #rhn_status = get_rhn_status()
 
   else:
     print(json.dumps({'subscription-method': 'none'}))
