@@ -277,6 +277,7 @@ if __name__ == "__main__":
           
   elif rhn_check():
     record = {'subscription-method': 'rhn'}
+    rhn_config = get_rhn_config()
 
   else:
     print(json.dumps({'subscription-method': 'none'}))
