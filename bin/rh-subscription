@@ -14,6 +14,7 @@ TODO:
 
 import json
 import re
+import os
 import subprocess
 import sys
 import tempfile
@@ -204,6 +205,25 @@ def get_sm_repos():
 
   return repos
 
+def sm_check():
+  """
+  Check if the host is registered using Subscription Manager
+  """
+  try:
+    subprocess.check_call(
+      "sudo subscription-manager status".split(),
+      stdout=open(os.devnull),
+      stderr=subprocess.STDOUT)
+  except subprocess.CalledProcessError as e:
+    # called but unsuccessful
+    return False
+  except OSError as e:
+    # command not found
+    return False
+
+  return True
+    
+  
 def rhn_check():
   """
   Check if the host is registered with RHN Classic or Sat5
@@ -211,7 +231,10 @@ def rhn_check():
   # This needs renaming to show intent
   
   try:
-    subprocess.check_call("/usr/sbin/rhn_check")
+    subprocess.check_call(
+      "/usr/sbin/rhn_check",
+      stdout=open(os.devnull),
+      stderr=subprocess.STDOUT)
   except:
     # CalledSubprocessError returns non-0
     # OSError - no such file
@@ -236,17 +259,29 @@ def rhn_config():
 
 if __name__ == "__main__":
 
-  record = {}
-  sm_config = get_sm_config()
-  record['config'] = sm_config
-  sm_status = get_sm_status()
-  record['status'] = sm_status
+  # first, check if subscribed by subscription manager
+  if sm_check():
   
-  if sm_status['status'] != 'Unsubscribed':
-    sm_consumed = get_sm_consumed()
-    sm_repos = get_sm_repos()
+    record = {'subscription-method': 'subscription-manager'}
+    sm_config = get_sm_config()
+    record['config'] = sm_config
+    sm_status = get_sm_status()
+    record['status'] = sm_status
+  
+    if sm_status['status'] != 'Unsubscribed':
+      sm_consumed = get_sm_consumed()
+      sm_repos = get_sm_repos()
 
-    record['consumed'] = sm_consumed
-    record['repos'] = sm_repos
+      record['consumed'] = sm_consumed
+      record['repos'] = sm_repos
+          
+  elif rhn_check():
+    record = {'subscription-method': 'rhn'}
+
+  else:
+    print(json.dumps({'subscription-method': 'none'}))
+    sys.exit(1)
+    
     
   print(json.dumps(record))
+  sys.exit(0)
