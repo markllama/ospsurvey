@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+from __future__ import print_function
+"""
+Check and report any available security updates
+"""
+import json
+import re
+import subprocess
+
+def check_updates():
+  """
+  Query the security updates available with yum
+  Header: Loaded plugins...
+  Columns: Advisory ID, reason/level, package name
+  Footer: updateinfo list done
+  """
+  update_string = subprocess.check_output('sudo yum updateinfo list security'.split())
+  update_lines = update_string.split('\n')
+  # The header and footer are the first and last lines
+
+  packages = {}
+  for line in update_lines[1:-2]:
+    (advisory, reason, package) = re.split('\s+', line)
+
+    if not package in packages:
+      packages[package]=list()
+
+    packages[package].append({'advisory': advisory, 'reason': reason})
+    
+  return packages
+
+if __name__ == "__main__":
+
+  updates = check_updates()
+
+  print(json.dumps(updates))
