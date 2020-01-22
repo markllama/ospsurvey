@@ -3,7 +3,9 @@ from __future__ import print_function
 """
 Check and report any available security updates
 """
+import logging
 import json
+import os
 import re
 import subprocess
 
@@ -19,18 +21,26 @@ def check_updates():
   # The header and footer are the first and last lines
 
   packages = {}
-  for line in update_lines[1:-2]:
-    (advisory, reason, package) = re.split('\s+', line)
+  for line in update_lines:
+    # skip non-record lines
+    if len(line) == 0 \
+       or line.startswith('Loaded') \
+       or line.startswith('updateinfo'):
+      continue
 
+    # Split into data components
+    (advisory, reason, package) = re.split('\s+', line)
+    
     if not package in packages:
       packages[package]=list()
-
+      
     packages[package].append({'advisory': advisory, 'reason': reason})
-    
+
   return packages
 
 if __name__ == "__main__":
 
+  logging.basicConfig(loglevel=logging.DEBUG)
   updates = check_updates()
 
   print(json.dumps(updates))
