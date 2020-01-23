@@ -61,6 +61,7 @@ if __name__ == "__main__":
   elif ospsurvey.probes.software.rhn_check():
     record = {'subscription-method': 'rhn'}
     rhn_config = ospsurvey.probes.software.get_rhn_config()
+    record['config'] = rhn_config
     #rhn_status = get_rhn_status()
 
   else:
