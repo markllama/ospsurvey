@@ -232,7 +232,6 @@ def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
   """
   Read and return the RHN/Sat5 subscription configuration
   """
-  print("reading {}".format(up2date_file))
   config_file = open(up2date_file)
   lines = config_file.readlines()
   config_file.close()
@@ -246,6 +245,28 @@ def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
 #
 # Yum repos and RPMs installed
 #
+def get_repo_list(selector='enabled'):
+  """
+  Return a list of YUM repos
+  """
+  if selector == '':
+    selector = 'enabled'
+    
+  if selector not in ['enabled', 'disabled', 'all']:
+    raise ValueError("invalid selector {} - valid selectors: enabled, disabled, all".format(selector))
+
+  repo_string = subprocess.check_output('sudo yum repolist {}'.format(selector))
+  repo_lines = repo_string.split('\n')
+
+  # the first line should match Loaded Plugins
+  # Line 2 may match
+  #   This system is receiving updates from RHN Classic or Red Hat Satellite.
+  # Line N:
+  #   repo id            repo name                        status
+  #   no space string    human string                     num of packages?
+  # Line ...:
+  # Last Line: repolist: nnn
+  
 
 #
 # Updates required and available
