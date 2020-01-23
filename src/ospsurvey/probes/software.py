@@ -2,8 +2,10 @@
 Classes and Functions to query the software update status of a Red Hat
 server.
 """
+import os
 import re
 import subprocess
+import tempfile
 
 #
 # Subscription Manager
@@ -82,7 +84,7 @@ def get_sm_status():
 
 def parse_sm_record(lines):
   """
-  Create a dict record from a fragement of a subscription-manager output
+  Create a dict record from a fragment of a subscription-manager output
   """
   # lines are key/value, with multiple values signalled by white space at the
   # beginning of the line.
@@ -240,8 +242,6 @@ def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
   config = {v[0]:v[1] for v in varlist}
   
   return config
-
-
 
 #
 # Yum repos and RPMs installed
