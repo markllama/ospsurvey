@@ -58,9 +58,9 @@ if __name__ == "__main__":
       record['consumed'] = sm_consumed
       record['repos'] = sm_repos
           
-  elif rhn_check():
+  elif ospsurvey.probes.software.rhn_check():
     record = {'subscription-method': 'rhn'}
-    rhn_config = get_rhn_config()
+    rhn_config = ospsurvey.probes.software.get_rhn_config()
     #rhn_status = get_rhn_status()
 
   else:
