@@ -2,6 +2,8 @@
 Classes and Functions to query the software update status of a Red Hat
 server.
 """
+import re
+import subprocess
 
 #
 # Subscription Manager
@@ -228,6 +230,7 @@ def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
   """
   Read and return the RHN/Sat5 subscription configuration
   """
+  print("reading {}".format(up2date_file))
   config_file = open(up2date_file)
   lines = config_file.readlines()
   config_file.close()
@@ -247,14 +250,14 @@ def get_rhn_config(up2date_file='/etc/sysconfig/rhn/up2date'):
 #
 # Updates required and available
 #
-def check_updates():
+def check_updates(check_func=subprocess.check_output):
   """
   Query the package updates available with yum
   Header: Loaded plugins...
   Columns: Advisory ID, reason/level, package name
   Footer: updateinfo list done
   """
-  update_string = subprocess.check_output('sudo yum updateinfo list security'.split())
+  update_string = check_func('sudo yum updateinfo list security'.split())
   update_lines = update_string.split('\n')
   # The header and footer are the first and last lines
 
@@ -276,14 +279,14 @@ def check_updates():
 
   return packages
 
-def check_cves():
+def check_cves(check_func=subprocess.check_output):
   """
   Query the vulnerability updates available with yum
   Header: Loaded plugins...
   Columns: Advisory ID, reason/level, package name
   Footer: updateinfo list done
   """
-  update_string = subprocess.check_output('sudo yum updateinfo list cves'.split())
+  update_string = check_func('sudo yum updateinfo list cves'.split())
   update_lines = update_string.split('\n')
   # The header and footer are the first and last lines
 
