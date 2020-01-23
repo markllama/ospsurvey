@@ -30,7 +30,5 @@ class TestRHN(unittest.TestCase):
     blank_fields = [f for f in cfg.keys() if cfg[f] == '']
     self.assertEqual(len(blank_fields), 5)
 
-    print(blank_fields)
-
 if __name__ == "__main__":
   unittest.main()
