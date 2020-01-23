@@ -21,13 +21,13 @@ def list_nodes(source_fn=subprocess.check_output):
     return []
 
 
-  node_keys = [k.replace(" ", "_") for k in node_records[0].keys()]
+  node_keys = [k.replace(" ", "_").lower() for k in node_records[0].keys()]
   NodeClass = namedtuple("NodeClass", node_keys)
   nodes = [NodeClass._make(s.values()) for s in node_records]
 
   # pre-convert nested capabilities string to dict
   for n in nodes:
-    n.Properties['capabilities'] = node_capabilities(n)
+    n.properties['capabilities'] = node_capabilities(n)
 
   return nodes
 
@@ -43,7 +43,7 @@ def get_node(id_or_name, source_fn=subprocess.check_output):
 
   node = NodeClass._make(node_info.values())
 
-  node.Properties['capabilities'] = node_capabilities(node)
+  node.properties['capabilities'] = node_capabilities(node)
   
   return node
 
@@ -53,13 +53,13 @@ def node_capabilities(node):
   Return just the dict of capabilities strings from a NodeClass object
   """
 
-  if type(node.Properties['capabilities']) is str:
-    cap_string = node.Properties['capabilities']
+  if type(node.properties['capabilities']) is str:
+    cap_string = node.properties['capabilities']
     cap_entry_strings = cap_string.split(',')
     cap_entries = map(lambda c: c.split(':'), cap_entry_strings)
     capabilities = {c[0]:c[1] for c in cap_entries}
   else:
-    capabilties = node.Properties['capabilities']
+    capabilties = node.properties['capabilities']
 
   return capabilities
                     

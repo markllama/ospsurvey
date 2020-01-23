@@ -55,5 +55,4 @@ class TestProbes(unittest.TestCase):
 
   def test_nodes_get(self):
     nodes = ospsurvey.probes.nodes.list_nodes()
-    print("getting {}".format(nodes[0].Name))
-    n = ospsurvey.probes.nodes.get_node(nodes[0].Name)
+    n = ospsurvey.probes.nodes.get_node(nodes[0].name)
