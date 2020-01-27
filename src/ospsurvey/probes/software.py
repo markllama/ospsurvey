@@ -299,7 +299,40 @@ def get_repo_info(repo_name):
       repo_info[k] = v
 
   return repo_info
+
+def get_yum_history():
+  """
+  Get information on the most recent software update activity
+  """
+  info_string = subprocess.check_output("sudo yum history info".split())
+  info_lines = info_string.split("\n")
+  # Ignore the "plugins" line and everything before it
+  plugins_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Loaded')][0]
+
+  transaction_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Transaction performed with:')]
+  packages_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Packages Altered:')]
+  scriptlet_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Scriptlet output:')]
+
+  history = {}
+
+  kv_pattern = re.compile('^([^:]+)\s*:\s+(.*)$')
+  rpm_record_pattern = re.compile('^\s+([^\s]+)\s+(.*)$')
   
+  for line in info_lines:
+
+    kv = kv_pattern.match(line)
+    if kv != None:
+      (k,v) = kv.groups()
+      history[k.strip()] = v
+
+  # Collect the transaction records if there are any
+  if len(transaction_lineno) == 1:
+    transaction_buffer = [l for l in line[transaction_lineno[0]+1:] if l.startswith['    ']]
+              
+  # remove Loaded Plugins
+  # Note/Remove updates from classic or sat
+
+  return history
 #
 # Updates required and available
 #

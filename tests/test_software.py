@@ -7,6 +7,7 @@ subscriptions, repositories and updates
 
 import unittest
 
+import json
 import re
 
 import ospsurvey.probes.software
@@ -40,7 +41,15 @@ class TestRHN(unittest.TestCase):
     repo_info = ospsurvey.probes.software.get_repo_info(repo_names[0])
 
     # This is not a valid test, but it executes the code
-    print(repo_info)
+    print(json.dumps(repo_info))
+
+  def test_yum_history(self):
+    """
+    Report the most recent yum transaction
+    """
+    repo_history = ospsurvey.probes.software.get_yum_history()
+
+    print("Yum History: {}".format(json.dumps(repo_history)))
 
 if __name__ == "__main__":
   unittest.main()
