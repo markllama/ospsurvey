@@ -255,7 +255,7 @@ def get_repo_list(selector='enabled'):
   if selector not in ['enabled', 'disabled', 'all']:
     raise ValueError("invalid selector {} - valid selectors: enabled, disabled, all".format(selector))
 
-  repo_string = subprocess.check_output('sudo yum repolist {}'.format(selector))
+  repo_string = subprocess.check_output('sudo yum repolist {}'.format(selector).split())
   repo_lines = repo_string.split('\n')
 
   # the first line should match Loaded Plugins
@@ -266,8 +266,40 @@ def get_repo_list(selector='enabled'):
   #   no space string    human string                     num of packages?
   # Line ...:
   # Last Line: repolist: nnn
-  
+  plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
+  header_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repo id')][0]
+  footer_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repolist')][0]
 
+  repo_ids = [l.split()[0].split('/') for l in repo_lines[header_lineno+1:footer_lineno-1]]
+
+  repo_names = [r[0] for r in repo_ids]
+    
+  return repo_names
+  
+def get_repo_info(repo_name):
+  """
+  """
+  repo_string = subprocess.check_output("sudo yum repoinfo {}".format(repo_name).split())
+  repo_lines = repo_string.split('\n')
+
+  # Ignore the "plugins" line and everything before it
+  plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
+
+  repo_info = {}
+  for line in repo_lines[plugins_lineno+1:]:
+    # stop when you get to a blank line
+    if line == '':
+      break
+
+    # Match the key-values around the first colon (:).  Remove white space
+    info_match = re.match('^\s*([^:]+[^ ])\s*:\s*(.*)$', line)
+    if info_match:
+      (k, v) = info_match.groups()
+      
+      repo_info[k] = v
+
+  return repo_info
+  
 #
 # Updates required and available
 #

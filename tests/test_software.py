@@ -30,5 +30,17 @@ class TestRHN(unittest.TestCase):
     blank_fields = [f for f in cfg.keys() if cfg[f] == '']
     self.assertEqual(len(blank_fields), 5)
 
+  def test_yum_repos(self):
+
+    # I gotta figure out how to mock the subprocess.check_output call
+    repo_names = ospsurvey.probes.software.get_repo_list()
+    # Now that you have the names, get the repo information
+    print(repo_names)
+
+    repo_info = ospsurvey.probes.software.get_repo_info(repo_names[0])
+
+    # This is not a valid test, but it executes the code
+    print(repo_info)
+
 if __name__ == "__main__":
   unittest.main()

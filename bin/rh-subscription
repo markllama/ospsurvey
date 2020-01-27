@@ -42,10 +42,17 @@ class SmConfigParser(configparser.ConfigParser):
     
 if __name__ == "__main__":
 
-  # first, check if subscribed by subscription manager
+  record = {}
+  # Get information on enabled repos regardless:
+  # I gotta figure out how to mock the subprocess.check_output call
+  repo_names = ospsurvey.probes.software.get_repo_list()
+  repo_info = [ospsurvey.probes.software.get_repo_info(r) for r in repo_names]
+  record['repos'] = {'yum': repo_info }
+  
+  # check if subscribed by subscription manager
   if ospsurvey.probes.software.sm_check():
   
-    record = {'subscription-method': 'subscription-manager'}
+    record['subscription-method'] = 'subscription-manager'
     sm_config = ospsurvey.probes.software.get_sm_config()
     record['config'] = sm_config
     sm_status = ospsurvey.probes.software.get_sm_status()
@@ -56,10 +63,10 @@ if __name__ == "__main__":
       sm_repos = ospsurvey.probes.software.get_sm_repos()
 
       record['consumed'] = sm_consumed
-      record['repos'] = sm_repos
+      record['repos']['sm'] = sm_repos
           
   elif ospsurvey.probes.software.rhn_check():
-    record = {'subscription-method': 'rhn'}
+    record['subscription-method'] = 'rhn'
     rhn_config = ospsurvey.probes.software.get_rhn_config()
     record['config'] = rhn_config
     #rhn_status = get_rhn_status()
