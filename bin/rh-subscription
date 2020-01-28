@@ -63,10 +63,11 @@ if __name__ == "__main__":
   repo_names = ospsurvey.probes.software.get_repo_list()
   repo_info = [ospsurvey.probes.software.get_repo_info(r) for r in repo_names]
   record['repos'] = {'yum': repo_info }
-  record['history'] = ospsurvey.probes.software.get_yum_history()
 
-  record['updates'] = ospsurvey.probes.software.check_updates()
-  record['cves'] = ospsurvey.probes.software.check_cves()
+  record['updates'] = {}
+  record['updates']['history'] = ospsurvey.probes.software.get_yum_history()
+  record['updates']['packages'] = ospsurvey.probes.software.check_updates()
+  record['updates']['cves'] = ospsurvey.probes.software.check_cves()
 
   # check if subscribed by subscription manager
   if ospsurvey.probes.software.sm_check():
