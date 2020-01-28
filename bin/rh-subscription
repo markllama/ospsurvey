@@ -12,8 +12,11 @@ TODO:
   /etc/sysconfig/rhn/*
 """
 
+import datetime
 import json
+import platform
 import sys
+
 
 import ospsurvey.probes.software
 
@@ -42,14 +45,27 @@ class SmConfigParser(configparser.ConfigParser):
     
 if __name__ == "__main__":
 
-  record = {}
+  # what do we want to know about this report?
+  # hostname
+  # start time
+  # end time
+  
+  record = {
+    'metadata': {
+      'host': platform.node(),
+    }
+  }
+
+  start_time = datetime.datetime.now()
+  
   # Get information on enabled repos regardless:
   # I gotta figure out how to mock the subprocess.check_output call
   repo_names = ospsurvey.probes.software.get_repo_list()
   repo_info = [ospsurvey.probes.software.get_repo_info(r) for r in repo_names]
   record['repos'] = {'yum': repo_info }
+  record['history'] = ospsurvey.probes.software.get_yum_history()
 
-  record['packages'] = ospsurvey.probes.software.check_updates()
+  record['updates'] = ospsurvey.probes.software.check_updates()
   record['cves'] = ospsurvey.probes.software.check_cves()
 
   # check if subscribed by subscription manager
@@ -75,9 +91,11 @@ if __name__ == "__main__":
     #rhn_status = get_rhn_status()
 
   else:
-    print(json.dumps({'subscription-method': 'none'}))
-    sys.exit(1)
-    
-    
+    record['subscription-method': 'none']
+
+  end_time = datetime.datetime.now()
+  record['metadata']['start'] = str(start_time)
+  record['metadata']['duration'] = str(end_time - start_time)
+  
   print(json.dumps(record))
   sys.exit(0)
