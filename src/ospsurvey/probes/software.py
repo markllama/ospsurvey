@@ -270,10 +270,16 @@ def get_repo_list(selector='enabled'):
   header_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repo id')][0]
   footer_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repolist')][0]
 
+  # Get the lines between the header and footer, take the first word and just
+  # the first half of that.
   repo_ids = [l.split()[0].split('/') for l in repo_lines[header_lineno+1:footer_lineno-1]]
 
   repo_names = [r[0] for r in repo_ids]
-    
+
+  # if the repo info is out of date, it can have a leading bang (!)
+  # remove that too
+  repo_names = [re.sub('^!', '', n) for n in repo_names]
+  
   return repo_names
   
 def get_repo_info(repo_name):
@@ -306,29 +312,71 @@ def get_yum_history():
   """
   info_string = subprocess.check_output("sudo yum history info".split())
   info_lines = info_string.split("\n")
-  # Ignore the "plugins" line and everything before it
-  plugins_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Loaded')][0]
-
-  transaction_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Transaction performed with:')]
-  packages_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Packages Altered:')]
-  scriptlet_lineno = [i[0] for i in enumerate(info_lines) if info_lines[i[0]].startswith('Scriptlet output:')]
-
   history = {}
 
   kv_pattern = re.compile('^([^:]+)\s*:\s+(.*)$')
-  rpm_record_pattern = re.compile('^\s+([^\s]+)\s+(.*)$')
+  rpm_record_pattern = re.compile('^\s+([^\s]+)\s+([^\s]+)\s+(.*)$')
   
-  for line in info_lines:
+  for line in info_lines[1:]:
 
     kv = kv_pattern.match(line)
     if kv != None:
       (k,v) = kv.groups()
       history[k.strip()] = v
 
-  # Collect the transaction records if there are any
-  if len(transaction_lineno) == 1:
-    transaction_buffer = [l for l in line[transaction_lineno[0]+1:] if l.startswith['    ']]
-              
+  # Find the start of any of the record sections
+  (t_start, p_start, s_start) = (0, 0, 0)
+  for i, line in enumerate(info_lines):    
+    if line == 'Transaction performed with:':
+      t_start = i
+      continue
+    
+    if line == 'Packages Altered:':
+      p_start = i
+      continue
+
+    if line == 'Scriptlet output:':
+      s_start = i
+      continue
+
+    if line.startswith("Loaded plugins:"):
+      plugins_lineno = i
+      continue
+
+  # Step through the transaction lines
+  #  End the loop when the first line does not match the record pattern
+  if t_start:
+    transactions = []
+    for line in info_lines[t_start+1:]:
+      r_match = rpm_record_pattern.match(line)
+      if r_match == None:
+        break
+
+      (action, package, repo) = r_match.groups()
+      record = {'action': action, 'package': package, 'repo': repo}
+      transactions.append(record)
+
+    history['transactions'] = transactions
+
+  # Step through the package lines
+  # End the loop when the first line does not match the record pattern
+  if p_start:
+    packages = []
+    for line in info_lines[p_start+1:]:
+      r_match = rpm_record_pattern.match(line)
+      if r_match == None:
+        break
+
+      (action, package, repo) = r_match.groups()
+      if action == "Update":
+        packages[-1]['new_version'] = package
+      else:
+        record = {'action': action, 'package': package, 'repo': repo}
+        packages.append(record)
+    history['packages'] = packages
+
+  # Ignoring Scriptlet output for now - MAL 20200128
+  
   # remove Loaded Plugins
   # Note/Remove updates from classic or sat
 
