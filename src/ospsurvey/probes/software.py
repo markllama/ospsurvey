@@ -421,11 +421,16 @@ def check_updates(check_func=subprocess.check_output):
     # skip non-record lines
     if len(line) == 0 \
        or line.startswith('Loaded') \
-       or line.startswith('updateinfo'):
+       or line.startswith('updateinfo') \
+       or line.startswith('This system'):
       continue
 
     # Split into data components
-    (advisory, reason, package) = re.split('\s+', line)
+    # All record lines are three components
+    try:
+      (advisory, reason, package) = re.split('\s+', line)
+    except ValueError:
+      continue
     
     if not package in packages:
       packages[package]=list()
@@ -454,7 +459,10 @@ def check_cves(check_func=subprocess.check_output):
       continue
 
     # Split into data components - CVES start with white space
-    (advisory, reason, package) = re.split('\s+', line.strip())
+    try:
+      (advisory, reason, package) = re.split('\s+', line.strip())
+    except ValueError:
+      continue
     
     if not package in packages:
       packages[package]=list()
