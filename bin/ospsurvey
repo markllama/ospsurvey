@@ -4,11 +4,42 @@ from __future__ import print_function
 """
 import argparse
 
+def report_all(args):
+  pass
+
+
+def report_sm(args):
+  pass
+
+def report_yum(args):
+  pass
+
+def report_cve(args):
+  pass
+
+def report_rpm(args):
+  pass
+
 if __name__ == "__main__":
 
   parser = argparse.ArgumentParser()
 
   func_parsers = parser.add_subparsers()
+
+  all_parser = func_parsers.add_parser('all')
+  all_parser.set_defaults(func=report_all)
+  
+  sm_parser = func_parsers.add_parser('sm')
+  sm_parser.set_defaults(func=report_sm)
+  
+  yum_parser = func_parsers.add_parser('yum')
+  yum_parser.set_defaults(func=report_yum)
+  
+  cve_parser = func_parsers.add_parser('cve')
+  cve_parser.set_defaults(func=report_cve)
+
+  rpm_parser = func_parsers.add_parser('rpm')
+  rpm_parser.set_defaults(func=report_rpm)
   
   args = parser.parse_args()
 
