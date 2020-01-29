@@ -23,7 +23,7 @@ with open(path.join(here, 'README'), encoding='utf-8') as f:
   
 setup(
   name='ospsurvey',
-  version='0.2.1',
+  version='0.2.2',
   description='Survey an OpenStack Cluster',
   long_description=long_description,
   #long_description_content_type='text/markdown',
@@ -48,8 +48,13 @@ setup(
     '.': ['*.txt', '*.rst', '*.md']
   },
 
-  scripts=['bin/server-role'],
-  #python_requires='>=2.7',
+  scripts=[
+    'bin/server-role',
+    'bin/service-checks',
+    'bin/check-updates',
+    'bin/rh-subscription'
+  ],
+  python_requires='>=2.7',
 
   test_suite="tests"
 )

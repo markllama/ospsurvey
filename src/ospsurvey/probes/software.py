@@ -306,6 +306,25 @@ def get_repo_info(repo_name):
 
   return repo_info
 
+# SAMPLE
+# yum history info
+# Loaded plugins: product-id, search-disabled-repos, subscription-manager
+# Transaction ID : 142
+# Begin time     : Wed Jan 22 07:56:42 2020
+# Begin rpmdb    : 1208:938a582ff2c1559ddafe7b8cd79c3b2dc8dee22c
+# End time       :            07:56:43 2020 (1 seconds)
+# End rpmdb      : 1209:f9d7dd8d1a5b709ebaa88fca24391194bd1bff7d
+# User           :  <rack>
+# Return-Code    : Success
+# Command Line   : install nano
+# Transaction performed with:
+#     Installed     rpm-4.11.3-40.el7.x86_64                    @rhel-7-server-rpms
+#     Installed     subscription-manager-1.24.13-3.el7_7.x86_64 @rhel-7-server-rpms
+#     Installed     yum-3.4.3-163.el7.noarch                    @rhel-7-server-rpms
+# Packages Altered:
+#     Install nano-2.3.1-10.el7.x86_64 @rhel-7-server-rpms
+# history info
+
 def get_yum_history():
   """
   Get information on the most recent software update activity
@@ -381,6 +400,8 @@ def get_yum_history():
   # Note/Remove updates from classic or sat
 
   return history
+
+
 #
 # Updates required and available
 #
