@@ -49,8 +49,28 @@ def report_all(args):
   print(md)
   
 
+import ospsurvey.probes.software
+
 def report_sm(args):
   md = Report('subscription-manager')
+
+  record = {}
+  if ospsurvey.probes.software.sm_check():
+  
+    record['subscription-method'] = 'subscription-manager'
+    sm_config = ospsurvey.probes.software.get_sm_config()
+    record['config'] = sm_config
+    sm_status = ospsurvey.probes.software.get_sm_status()
+    record['status'] = sm_status
+  
+    if sm_status['status'] != 'Unsubscribed':
+      sm_consumed = ospsurvey.probes.software.get_sm_consumed()
+      sm_repos = ospsurvey.probes.software.get_sm_repos()
+
+      record['consumed'] = sm_consumed
+      record['repos']['sm'] = sm_repos
+          
+  md.data = record
   md.end()
   print(md)
 
