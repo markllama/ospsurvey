@@ -4,6 +4,8 @@ from __future__ import print_function
 Report status of OSP servers and services
 """
 import argparse
+import logging
+logging.basicConfig(level=logging.INFO)
 
 #
 #
@@ -54,7 +56,16 @@ import ospsurvey.probes.sm
 def report_sm(args):
   md = Report('subscription-manager')
 
-  md.data = ospsurvey.probes.sm.get_sm_info()
+  sm = ospsurvey.probes.sm.SubscriptionManager()
+  if sm.subscribed():
+    md.data = {'sm': sm.status()}
+    md.data['sm']['config'] = sm.config()
+    md.data['sm']['consumed'] = sm.consumed()
+    md.data['sm']['repos'] = sm.repos()
+
+    #ospsurvey.probes.sm.get_sm_info()
+  else:
+    md.data = {}
   md.end()
   print(md)
 
