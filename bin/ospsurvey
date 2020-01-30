@@ -1,29 +1,80 @@
 #!/usr/bin/env python
 from __future__ import print_function
 """
+Report status of OSP servers and services
 """
 import argparse
 
-def report_all(args):
-  pass
+#
+#
+#
 
+import datetime
+import json
+import platform
+
+class Report():
+  """
+  Generate report metadata.
+  """
+  def __init__(self, topic):
+    host = platform.node()
+    self.start = datetime.datetime.now()
+
+    self.metadata = {
+      'topic': topic,
+      'host': host,
+      'start': str(self.start),
+      'duration': None
+    }
+
+    self.data = None
+
+  def __str__(self):
+    """
+    Convert the report to text
+    """
+    return json.dumps({'metadata': self.metadata, 'data': self.data})
+    
+  def end(self):
+    duration = datetime.datetime.now() - self.start
+    self.metadata['duration'] = duration.seconds
+
+#
+#
+#
+def report_all(args):
+  md = Report('all')
+  md.end()
+  print(md)
+  
 
 def report_sm(args):
-  pass
+  md = Report('subscription-manager')
+  md.end()
+  print(md)
 
 def report_yum(args):
-  pass
+  md = Report('yum repositories')
+  md.end()
+  print(md)
 
 def report_cve(args):
-  pass
+  md = Report('CVE')
+  md.end()
+  print(md)
 
 def report_rpm(args):
-  pass
+  md = Report('updates')
+  md.end()
+  print(md)
+
 
 if __name__ == "__main__":
 
   parser = argparse.ArgumentParser()
-
+  parser.set_defaults(func=report_all)
+  
   func_parsers = parser.add_subparsers()
 
   all_parser = func_parsers.add_parser('all')
