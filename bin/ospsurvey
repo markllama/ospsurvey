@@ -49,28 +49,12 @@ def report_all(args):
   print(md)
   
 
-import ospsurvey.probes.software
+import ospsurvey.probes.sm
 
 def report_sm(args):
   md = Report('subscription-manager')
 
-  record = {}
-  if ospsurvey.probes.software.sm_check():
-  
-    record['subscription-method'] = 'subscription-manager'
-    sm_config = ospsurvey.probes.software.get_sm_config()
-    record['config'] = sm_config
-    sm_status = ospsurvey.probes.software.get_sm_status()
-    record['status'] = sm_status
-  
-    if sm_status['status'] != 'Unsubscribed':
-      sm_consumed = ospsurvey.probes.software.get_sm_consumed()
-      sm_repos = ospsurvey.probes.software.get_sm_repos()
-
-      record['consumed'] = sm_consumed
-      record['repos']['sm'] = sm_repos
-          
-  md.data = record
+  md.data = ospsurvey.probes.sm.get_sm_info()
   md.end()
   print(md)
 
@@ -93,7 +77,7 @@ def report_rpm(args):
 if __name__ == "__main__":
 
   parser = argparse.ArgumentParser()
-  parser.set_defaults(func=report_all)
+  #parser.set_defaults(func=report_all)
   
   func_parsers = parser.add_subparsers()
 
