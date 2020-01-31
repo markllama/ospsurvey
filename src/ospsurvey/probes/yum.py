@@ -2,74 +2,139 @@
 Classes and Functions to query the software update status of a Red Hat
 server.
 """
-import os
 import re
 import subprocess
-import tempfile
 
-#
-# Yum repos and RPMs installed
-#
-def get_repo_list(selector='enabled'):
-  """
-  Return a list of YUM repos
-  """
-  if selector == '':
-    selector = 'enabled'
+class Yum():
+
+  def __init__(self):
+    self._repos = None
+    self._history = None
+    self._updates = None
+    self._cves = None
+
     
-  if selector not in ['enabled', 'disabled', 'all']:
-    raise ValueError("invalid selector {} - valid selectors: enabled, disabled, all".format(selector))
+    
+  def _repo_names(self, selector='enabled'):
+    """
+    Return a list of YUM repos
+    """
+    if selector == '':
+      selector = 'enabled'
+    
+    if selector not in ['enabled', 'disabled', 'all']:
+      raise ValueError("invalid selector {} - valid selectors: enabled, disabled, all".format(selector))
 
-  repo_string = subprocess.check_output('sudo yum repolist {}'.format(selector).split())
-  repo_lines = repo_string.split('\n')
+    repo_string = subprocess.check_output('sudo yum repolist {}'.format(selector).split())
+    repo_lines = repo_string.split('\n')
 
-  # the first line should match Loaded Plugins
-  # Line 2 may match
-  #   This system is receiving updates from RHN Classic or Red Hat Satellite.
-  # Line N:
-  #   repo id            repo name                        status
-  #   no space string    human string                     num of packages?
-  # Line ...:
-  # Last Line: repolist: nnn
-  plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
-  header_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repo id')][0]
-  footer_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repolist')][0]
+    # the first line should match Loaded Plugins
+    # Line 2 may match
+    #   This system is receiving updates from RHN Classic or Red Hat Satellite.
+    # Line N:
+    #   repo id            repo name                        status
+    #   no space string    human string                     num of packages?
+    # Line ...:
+    # Last Line: repolist: nnn
+    plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
+    header_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repo id')][0]
+    footer_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('repolist')][0]
 
-  # Get the lines between the header and footer, take the first word and just
-  # the first half of that.
-  repo_ids = [l.split()[0].split('/') for l in repo_lines[header_lineno+1:footer_lineno-1]]
+    # Get the lines between the header and footer, take the first word and just
+    # the first half of that.
+    repo_ids = [l.split()[0].split('/') for l in repo_lines[header_lineno+1:footer_lineno-1]]
 
-  repo_names = [r[0] for r in repo_ids]
+    repo_names = [r[0] for r in repo_ids]
 
-  # if the repo info is out of date, it can have a leading bang (!)
-  # remove that too
-  repo_names = [re.sub('^!', '', n) for n in repo_names]
+    # if the repo info is out of date, it can have a leading bang (!)
+    # remove that too
+    repo_names = [re.sub('^!', '', n) for n in repo_names]
   
-  return repo_names
-  
-def get_repo_info(repo_name):
-  """
-  """
-  repo_string = subprocess.check_output("sudo yum repoinfo {}".format(repo_name).split())
-  repo_lines = repo_string.split('\n')
+    return repo_names
 
-  # Ignore the "plugins" line and everything before it
-  plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
+  def repos(self, selector='enabled', refresh=False):
+    if self._repos == None or refresh == True:
+      repo_names = self._repo_names()
 
-  repo_info = {}
-  for line in repo_lines[plugins_lineno+1:]:
-    # stop when you get to a blank line
-    if line == '':
-      break
-
-    # Match the key-values around the first colon (:).  Remove white space
-    info_match = re.match('^\s*([^:]+[^ ])\s*:\s*(.*)$', line)
-    if info_match:
-      (k, v) = info_match.groups()
+      repos = {}
+      for name in repo_names:
+        repos[name] = self.repo_info(name)
       
-      repo_info[k] = v
+      self._repos = repos
 
-  return repo_info
+    return self._repos
+
+  def history(self, count=1, refresh=False):
+    return []
+
+  def updates(self, refresh=False):
+    #
+    # Updates required and available
+    #
+    """
+    Query the package updates available with yum
+    Header: Loaded plugins...
+    Columns: Advisory ID, reason/level, package name
+    Footer: updateinfo list done
+    """
+    if self._updates == None or refresh == True:
+      update_string = subprocess.check_output('sudo yum updateinfo list security'.split())
+      update_lines = update_string.split('\n')
+      # The header and footer are the first and last lines
+
+      packages = {}
+      for line in update_lines:
+        # skip non-record lines
+        if len(line) == 0 \
+           or line.startswith('Loaded') \
+           or line.startswith('updateinfo') \
+           or line.startswith('This system'):
+          continue
+
+        # Split into data components
+        # All record lines are three components
+        try:
+          (advisory, reason, package) = re.split('\s+', line)
+        except ValueError:
+          continue
+    
+        if not package in packages:
+          packages[package]=list()
+      
+        packages[package].append({'advisory': advisory, 'level': re.sub('/Sec.$', '', reason)})
+
+      self._updates = packages
+
+    return self._updates
+
+  def cves(self, refresh=False):
+    return []
+
+
+  def repo_info(self, repo_name, refresh=False):
+    """
+    Get detailed information on a specified yum repository
+    """
+    repo_string = subprocess.check_output("sudo yum repoinfo {}".format(repo_name).split())
+    repo_lines = repo_string.split('\n')
+
+    # Ignore the "plugins" line and everything before it
+    plugins_lineno = [i[0] for i in enumerate(repo_lines) if repo_lines[i[0]].startswith('Loaded')][0]
+
+    repo_info = {}
+    for line in repo_lines[plugins_lineno+1:]:
+      # stop when you get to a blank line
+      if line == '':
+        break
+
+      # Match the key-values around the first colon (:).  Remove white space
+      info_match = re.match('^\s*([^:]+[^ ])\s*:\s*(.*)$', line)
+      if info_match:
+        (k, v) = info_match.groups()
+      
+        repo_info[k] = v
+
+    return repo_info
 
 # SAMPLE
 # yum history info

@@ -52,6 +52,7 @@ def report_all(args):
   
 
 import ospsurvey.probes.sm
+import ospsurvey.probes.yum
 
 def report_sm(args):
   md = Report('subscription-manager')
@@ -71,6 +72,13 @@ def report_sm(args):
 
 def report_yum(args):
   md = Report('yum repositories')
+  yum = ospsurvey.probes.yum.Yum()
+  md.data = {}
+  md.data['history'] = yum.history()
+  md.data['repos'] = yum.repos()
+  md.data['updates'] = yum.updates()
+  md.data['cves'] = yum.cves()
+  
   md.end()
   print(md)
 
