@@ -276,6 +276,6 @@ class RedHatNetwork():
   
       varlist = [l.strip('\n').split('=') for l in lines if '=' in l and not re.match('.*\[comment\].*', l)]
   
-      config = {v[0]:v[1] for v in varlist}
+      self._config = {v[0]:v[1] for v in varlist}
   
     return self._config
