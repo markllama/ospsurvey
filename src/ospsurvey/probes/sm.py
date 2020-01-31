@@ -16,37 +16,60 @@ class SubscriptionManager():
   Query and report status of Subscription Manager
   """
   def __init__(self):
-    self._subscribed = None
-    self._config = None
     self._status = None
+    self._config = None
     self._purpose = None
     self._consumed = None
     self._repos = None
-  
-  def subscribed(self, refresh=False):
+
+  @staticmethod
+  def subscribed():
     """
     Check if the host is registered using Subscription Manager
     """
-    logging.debug("checking subscription")
-    if self._subscribed == None or refresh == True:
-      try:
-        subprocess.check_call(
-          "sudo subscription-manager status".split(),
-          stdout=open(os.devnull),
-          stderr=subprocess.STDOUT)
-      except subprocess.CalledProcessError as e:
-        # called but unsuccessful
-        self.subscribed = False
-      except OSError as e:
-        # command not found
-        self._subscribed = False
-
-      self._subscribed = True
-
-    else:
-      logging.debug("using cached value: {}".format(self._subscribed))
+    try:
+      subprocess.check_call(
+      "sudo subscription-manager status".split(),
+      stdout=open(os.devnull),
+      stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+      # called but unsuccessful
+      return False
+    except OSError as e:
+      # command not found
+      return False
       
-    return self._subscribed
+    return True
+
+
+  def status(self, refresh=False):
+    """
+    Gather subscription manager and yum status
+    """
+    if self._status == None or refresh == True:
+      # define the value search patterns
+      status_re = re.compile("Overall Status: (.*)")
+      purpose_re = re.compile("System Purpose Status: (.*)")
+
+      # get the actual status
+      try:
+        sm_status_string = \
+          subprocess.check_output("sudo subscription-manager status".split())
+
+        # extract the status string
+        status_match = status_re.search(sm_status_string, re.MULTILINE)
+        self._status = status_match.groups()[0]
+
+        # extract the purpose string
+        purpose_match = purpose_re.search(sm_status_string, re.MULTILINE)
+        self._purpose = purpose_match.groups()[0]
+      
+      except subprocess.CalledProcessError as e:
+        self._status = "Unsubscribed"
+        self._purpose = "Unknown"
+  
+    return {'status': self._status, 'purpose': self._purpose}
+
 
   def config(self, refresh=False):
     """
@@ -81,34 +104,6 @@ class SubscriptionManager():
       self._config = sm_config.as_dict()
       
     return self._config
-
-  def status(self, refresh=False):
-    """
-    Gather subscription manager and yum status
-    """
-    if self._status == None or refresh == True:
-      # define the value search patterns
-      status_re = re.compile("Overall Status: (.*)")
-      purpose_re = re.compile("System Purpose Status: (.*)")
-
-      # get the actual status
-      try:
-        sm_status_string = \
-          subprocess.check_output("sudo subscription-manager status".split())
-
-        # extract the status string
-        status_match = status_re.search(sm_status_string, re.MULTILINE)
-        self._status = status_match.groups()[0]
-
-        # extract the purpose string
-        purpose_match = purpose_re.search(sm_status_string, re.MULTILINE)
-        self._purpose = purpose_match.groups()[0]
-      
-      except subprocess.CalledProcessError as e:
-        self._status = "Unsubscribed"
-        self._purpose = "Unknown"
-  
-    return {'status': self._status, 'purpose': self._purpose}
 
 
   def repos(self, refresh=False):
@@ -240,6 +235,15 @@ def parse_sm_record(lines):
 # ----------------------------------------------------------------------------
 
 class RedHatNetwork():
+  """
+  TBD
+  """
+  
+  def __init__(self):
+    """
+    TBD
+    """
+    self._config = None
 
   @staticmethod
   def subscribed():
@@ -260,16 +264,18 @@ class RedHatNetwork():
 
       return True
 
-  def config(self, up2date_file='/etc/sysconfig/rhn/up2date'):
+
+  def config(self, refresh=False, up2date_file='/etc/sysconfig/rhn/up2date'):
     """
     Read and return the RHN/Sat5 subscription configuration
     """
-    config_file = open(up2date_file)
-    lines = config_file.readlines()
-    config_file.close()
+    if self._config == None or refresh == True:
+      config_file = open(up2date_file)
+      lines = config_file.readlines()
+      config_file.close()
   
-    varlist = [l.strip('\n').split('=') for l in lines if '=' in l and not re.match('.*\[comment\].*', l)]
+      varlist = [l.strip('\n').split('=') for l in lines if '=' in l and not re.match('.*\[comment\].*', l)]
   
-    config = {v[0]:v[1] for v in varlist}
+      config = {v[0]:v[1] for v in varlist}
   
-    return config
+    return self._config

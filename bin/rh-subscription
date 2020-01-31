@@ -46,13 +46,11 @@ if __name__ == "__main__":
   record['updates']['history'] = ospsurvey.probes.software.get_yum_history()
   record['updates']['packages'] = ospsurvey.probes.software.check_updates()
   record['updates']['cves'] = ospsurvey.probes.software.check_cves()
-
-
-  sm = ospsurvey.probes.sm.SubscriptionManager()
   
   # check if subscribed by subscription manager
-  if sm.subscribed():
-  
+  if ospsurvey.probes.sm.SubscriptionManager.subscribed():
+    sm = ospsurvey.probes.sm.SubscriptionManager()
+
     record['subscription-method'] = 'subscription-manager'
     record['sm'] = {}
     record['sm']['config'] = sm.config()
@@ -64,8 +62,8 @@ if __name__ == "__main__":
           
   elif ospsurvey.probes.sm.RedHatNetwork.subscribed():
     record['subscription-method'] = 'rhn'
-    rhn_config = ospsurvey.probes.software.get_rhn_config()
-    record['config'] = rhn_config
+    rhn = ospsurvey.probes.sm.RedHatNetwork()
+    record['config'] = rhn.config()
     #rhn_status = get_rhn_status()
 
   else:
