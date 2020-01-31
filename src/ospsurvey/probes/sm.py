@@ -186,8 +186,6 @@ class SubscriptionManager():
 
     return self._consumed  
 
-
-
 # ----------------------------------------------------------------------------
 # Module functions
 # ----------------------------------------------------------------------------
@@ -237,3 +235,40 @@ def parse_sm_record(lines):
 
   return title, record
 
+# ----------------------------------------------------------------------------
+# Legacy subscription: RHN
+# ----------------------------------------------------------------------------
+
+class RedHatNetwork():
+
+  def subscribed():
+      """
+      Check if the host is registered with RHN Classic or Sat5
+      """
+      # This needs renaming to show intent
+  
+      try:
+        subprocess.check_call(
+          "/usr/sbin/rhn_check",
+          stdout=open(os.devnull),
+          stderr=subprocess.STDOUT)
+      except:
+        # CalledSubprocessError returns non-0
+        # OSError - no such file
+        return False
+
+      return True
+
+  def config(self, up2date_file='/etc/sysconfig/rhn/up2date'):
+    """
+    Read and return the RHN/Sat5 subscription configuration
+    """
+    config_file = open(up2date_file)
+    lines = config_file.readlines()
+    config_file.close()
+  
+    varlist = [l.strip('\n').split('=') for l in lines if '=' in l and not re.match('.*\[comment\].*', l)]
+  
+    config = {v[0]:v[1] for v in varlist}
+  
+    return config
