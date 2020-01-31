@@ -62,8 +62,9 @@ if __name__ == "__main__":
           
   elif ospsurvey.probes.sm.RedHatNetwork.subscribed():
     record['subscription-method'] = 'rhn'
+    record['rhn'] = {}
     rhn = ospsurvey.probes.sm.RedHatNetwork()
-    record['config'] = rhn.config()
+    record['rhn']['config'] = rhn.config()
     #rhn_status = get_rhn_status()
 
   else:
