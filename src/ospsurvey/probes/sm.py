@@ -241,6 +241,7 @@ def parse_sm_record(lines):
 
 class RedHatNetwork():
 
+  @staticmethod
   def subscribed():
       """
       Check if the host is registered with RHN Classic or Sat5

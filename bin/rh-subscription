@@ -62,7 +62,7 @@ if __name__ == "__main__":
       record['sm']['consumed'] = sm.consumed()
       record['sm']['repos'] = sm.repos()
           
-  elif ospsurvey.probes.software.rhn_check():
+  elif ospsurvey.probes.sm.RedHatNetwork.subscribed():
     record['subscription-method'] = 'rhn'
     rhn_config = ospsurvey.probes.software.get_rhn_config()
     record['config'] = rhn_config
