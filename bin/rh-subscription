@@ -19,30 +19,8 @@ import sys
 
 
 import ospsurvey.probes.software
+import ospsurvey.probes.sm
 
-#
-# There are a couple of versions of ConfigParser. The older ones want to read
-# only from a file.  So this snippet adapts for both possibilities
-#
-#try:
-#  import configparser
-#except ImportError as e:
-#  print("failed to import configparser")
-#  sys.exit(1)
-
-import ConfigParser as configparser
-
-# Extend the ConfigParser to create a dict
-# from https://stackoverflow.com/questions/3220670/read-all-the-contents-in-ini-file-into-dictionary-with-python
-class SmConfigParser(configparser.ConfigParser):
-
-  def as_dict(self):
-    d = dict(self._sections)
-    for k in d:
-      d[k] = dict(self._defaults, **d[k])
-      d[k].pop('__name__', None)
-    return d
-    
 if __name__ == "__main__":
 
   # what do we want to know about this report?
@@ -69,21 +47,20 @@ if __name__ == "__main__":
   record['updates']['packages'] = ospsurvey.probes.software.check_updates()
   record['updates']['cves'] = ospsurvey.probes.software.check_cves()
 
+
+  sm = ospsurvey.probes.sm.SubscriptionManager()
+  
   # check if subscribed by subscription manager
-  if ospsurvey.probes.software.sm_check():
+  if sm.subscribed():
   
     record['subscription-method'] = 'subscription-manager'
-    sm_config = ospsurvey.probes.software.get_sm_config()
-    record['config'] = sm_config
-    sm_status = ospsurvey.probes.software.get_sm_status()
-    record['status'] = sm_status
+    record['sm'] = {}
+    record['sm']['config'] = sm.config()
+    record['sm']['status'] = sm.status()
   
-    if sm_status['status'] != 'Unsubscribed':
-      sm_consumed = ospsurvey.probes.software.get_sm_consumed()
-      sm_repos = ospsurvey.probes.software.get_sm_repos()
-
-      record['consumed'] = sm_consumed
-      record['repos']['sm'] = sm_repos
+    if record['sm']['status'] != 'Unsubscribed':
+      record['sm']['consumed'] = sm.consumed()
+      record['sm']['repos'] = sm.repos()
           
   elif ospsurvey.probes.software.rhn_check():
     record['subscription-method'] = 'rhn'
