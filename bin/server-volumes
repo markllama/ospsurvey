@@ -20,8 +20,8 @@ if __name__ == "__main__":
   servers = {}
   for project in projects:
     # servers[project['Name']] =
-    servers_string = subprocess.check_output("openstack server list --project {} --f json".split())
-    servers[project['Name'] = json.loads(servers_string)
+    servers_string = subprocess.check_output("openstack server list --project {} -f json".format(project['Name']).split())
+    servers[project['Name']] = json.loads(servers_string)
     
     
   print(json.dumps(servers))
