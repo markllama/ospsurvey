@@ -1,0 +1,15 @@
+#!/bin/env python
+from __future__ import print_function
+"""
+Report the storage use of all systems in a cloud
+"""
+
+import json
+import subprocess
+
+def get_all_projects():
+  project_string = subprocess.check_output("openstack project list -f json".split())
+  project_json = json.loads(project_string)
+
+if __name__ == "__main__":
+  pass
