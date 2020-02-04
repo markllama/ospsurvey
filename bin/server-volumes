@@ -9,7 +9,12 @@ import subprocess
 
 def get_all_projects():
   project_string = subprocess.check_output("openstack project list -f json".split())
-  project_json = json.loads(project_string)
+  projects = json.loads(project_string)
+
+  return projects
+  
 
 if __name__ == "__main__":
-  pass
+
+  projects = get_all_projects()
+  print(json.dumps(projects))
