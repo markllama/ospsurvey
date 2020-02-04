@@ -16,7 +16,7 @@ def get_all_projects():
 
   ProjectClass = namedtuple(
     "ProjectClass",
-    [s.replace(' ', '_') for p in project_records[0].keys()]
+    [p.replace(' ', '_') for p in project_records[0].keys()]
   )
   projects = [ProjectClass._make(p.values()) for p in project_records]
   return projects
