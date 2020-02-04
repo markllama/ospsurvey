@@ -17,4 +17,8 @@ def get_all_projects():
 if __name__ == "__main__":
 
   projects = get_all_projects()
-  print(json.dumps(projects))
+  servers = {}
+  for project in projects:
+    servers[project] = {}
+    
+  print(json.dumps(servers))
