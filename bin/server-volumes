@@ -25,16 +25,23 @@ def get_all_projects():
 if __name__ == "__main__":
 
   projects = get_all_projects()
-  servers = {}
+
+  # Get detailed instance information grouped by project.
   for project in projects:
     # servers[project['Name']] =
-    summary_string = subprocess.check_output("openstack server list --project {} -f json".format(project.Name).split())
+
+    # get the list of servers in each project
+    summary_string = subprocess.check_output("openstack server list -c Name -c ID -c Host --project {} -f json".format(project.Name).split())
     summary_list = json.loads(summary_string)
+
+    # now get the information for each server in the project
     for summary in summary_list:
+      servers = {}
       server_name = summary['Name']
       server_id = summary['ID']
       server_string = subprocess.check_output("openstack server show -f json {}".format(server_id).split())
       server = json.loads(server_string)
       servers[server_name] = server
-      
-  print(json.dumps(servers))
+      projects[project.Name] = servers
+    
+  print(json.dumps(projects))
