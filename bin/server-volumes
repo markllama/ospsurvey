@@ -35,13 +35,14 @@ if __name__ == "__main__":
     summary_list = json.loads(summary_string)
 
     # now get the information for each server in the project
+    all_servers = {}
     for summary in summary_list:
-      servers = {}
+      servers = []
       server_name = summary['Name']
       server_id = summary['ID']
       server_string = subprocess.check_output("openstack server show -f json {}".format(server_id).split())
       server = json.loads(server_string)
-      servers[server_name] = server
-      projects[project.Name] = servers
+      servers.append(server)
+      all_servers[project.Name] = servers
     
-  print(json.dumps(projects))
+  print(json.dumps(all_servers))
