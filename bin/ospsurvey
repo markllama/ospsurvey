@@ -93,6 +93,8 @@ def report_cve(args):
 def report_rpm(args):
   md = Report('updates')
   md.data = {}
+  yum = ospsurvey.probes.yum.Yum()
+  md.data['updates'] = yum.updates()
   md.end()
   print(md)
 
