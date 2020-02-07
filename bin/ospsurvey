@@ -72,8 +72,8 @@ def report_sm(args):
 
 def report_yum(args):
   md = Report('yum repositories')
-  yum = ospsurvey.probes.yum.Yum()
   md.data = {}
+  yum = ospsurvey.probes.yum.Yum()
   md.data['history'] = yum.history()
   md.data['repos'] = yum.repos()
   md.data['updates'] = yum.updates()
@@ -84,6 +84,7 @@ def report_yum(args):
 
 def report_cve(args):
   md = Report('CVE')
+  md.data = {}
   yum = ospsurvey.probes.yum.Yum()
   md.data['cves'] = yum.cves()
   md.end()
@@ -91,6 +92,7 @@ def report_cve(args):
 
 def report_rpm(args):
   md = Report('updates')
+  md.data = {}
   md.end()
   print(md)
 
