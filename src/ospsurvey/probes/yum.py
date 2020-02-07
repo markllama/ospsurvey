@@ -114,7 +114,7 @@ class Yum():
     Columns: Advisory ID, reason/level, package name
     Footer: updateinfo list done
     """
-    update_string = check_func('sudo yum updateinfo list cves'.split())
+    update_string = subprocess.check_output('sudo yum updateinfo list cves'.split())
     update_lines = update_string.split('\n')
     # The header and footer are the first and last lines
 
