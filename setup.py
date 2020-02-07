@@ -23,7 +23,7 @@ with open(path.join(here, 'README'), encoding='utf-8') as f:
   
 setup(
   name='ospsurvey',
-  version='0.2.3',
+  version='0.2.4',
   description='Survey an OpenStack Cluster',
   long_description=long_description,
   #long_description_content_type='text/markdown',
