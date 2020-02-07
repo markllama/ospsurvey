@@ -108,7 +108,36 @@ class Yum():
     return self._updates
 
   def cves(self, refresh=False):
-    return []
+    """
+    Query the vulnerability updates available with yum
+    Header: Loaded plugins...
+    Columns: Advisory ID, reason/level, package name
+    Footer: updateinfo list done
+    """
+    update_string = check_func('sudo yum updateinfo list cves'.split())
+    update_lines = update_string.split('\n')
+    # The header and footer are the first and last lines
+
+    packages = {}
+    for line in update_lines:
+      # skip non-record lines
+      if len(line) == 0 \
+         or line.startswith('Loaded') \
+         or line.startswith('updateinfo'):
+        continue
+
+      # Split into data components - CVES start with white space
+      try:
+        (advisory, reason, package) = re.split('\s+', line.strip())
+      except ValueError:
+        continue
+    
+      if not package in packages:
+        packages[package]=list()
+      
+      packages[package].append({'advisory': advisory, 'level': re.sub('/Sec.$', '', reason)})
+
+    return packages
 
 
   def repo_info(self, repo_name, refresh=False):

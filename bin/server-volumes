@@ -2,6 +2,7 @@
 from __future__ import print_function
 """
 Report the storage use of all systems in a cloud
+NOTE: 20200207 - MAL this may not make sense.  It appears that instance ephemeral storage is always placed in /var/lib/nova/instances on the compute node. That can be shared storage or not but it's generally mounted by the OS and so is not selectable per instance ona single node.
 """
 
 from collections import namedtuple
