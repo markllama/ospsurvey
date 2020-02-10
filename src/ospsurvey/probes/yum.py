@@ -65,7 +65,80 @@ class Yum():
     return self._repos
 
   def history(self, count=1, refresh=False):
-    return []
+    """
+    Get information on the most recent software update activity
+    """
+    info_string = subprocess.check_output("sudo yum history info".split())
+    info_lines = info_string.split("\n")
+    history = {}
+
+    kv_pattern = re.compile('^([^:]+)\s*:\s+(.*)$')
+    rpm_record_pattern = re.compile('^\s+([^\s]+)\s+([^\s]+)\s+(.*)$')
+  
+    for line in info_lines[1:]:
+
+      kv = kv_pattern.match(line)
+      if kv != None:
+        (k,v) = kv.groups()
+        history[k.strip()] = v
+
+    # Find the start of any of the record sections
+    (t_start, p_start, s_start) = (0, 0, 0)
+    for i, line in enumerate(info_lines):    
+      if line == 'Transaction performed with:':
+        t_start = i
+        continue
+    
+      if line == 'Packages Altered:':
+        p_start = i
+        continue
+
+      if line == 'Scriptlet output:':
+        s_start = i
+        continue
+
+      if line.startswith("Loaded plugins:"):
+        plugins_lineno = i
+        continue
+
+    # Step through the transaction lines
+    #  End the loop when the first line does not match the record pattern
+    if t_start:
+      transactions = []
+      for line in info_lines[t_start+1:]:
+        r_match = rpm_record_pattern.match(line)
+        if r_match == None:
+          break
+
+        (action, package, repo) = r_match.groups()
+        record = {'action': action, 'package': package, 'repo': repo}
+        transactions.append(record)
+
+      history['transactions'] = transactions
+
+    # Step through the package lines
+    # End the loop when the first line does not match the record pattern
+    if p_start:
+      packages = []
+      for line in info_lines[p_start+1:]:
+        r_match = rpm_record_pattern.match(line)
+        if r_match == None:
+          break
+
+        (action, package, repo) = r_match.groups()
+        if action == "Update":
+          packages[-1]['new_version'] = package
+        else:
+          record = {'action': action, 'package': package, 'repo': repo}
+          packages.append(record)
+      history['packages'] = packages
+
+    # Ignoring Scriptlet output for now - MAL 20200128
+  
+    # remove Loaded Plugins
+    # Note/Remove updates from classic or sat
+
+    return history
 
   def updates(self, refresh=False):
     #
